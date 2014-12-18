@@ -1,0 +1,55 @@
+{% load boards_custom_tags %}
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle pull-right" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="{% url 'home' %}" class="navbar-brand"><strong>Soongsil Electronic Exhibit</strong></a>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-ex1-collapse" role="navigation">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- <li class="active"><a href="index.html">HOME</a></li> -->
+                <li><a href="{% url 'aboutus' %}">ABOUT US</a></li>
+                <li><a href="{% url 'linkboard:linkboardpage' 1 %}">LINK BOARD</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">BOARDS <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% if boardlist %}
+                          {% for board in boardlist %}
+                          <!-- board page of <a> tag is linked to the first page of the target board -->
+                            {% if board|posts_last_2_weeks %}
+                              {% if board|posts_last_3_days %}
+                                <li><a href="{% url 'boards:boardpage' board.id 1 %}">{{ board.boardname }}&nbsp;&nbsp;<span class="gray">{{ board | posts_last_3_days }}&nbsp;</span><span class="dark-gray"><strong>N</strong></span></a>
+                              {% else %}
+                              <li><a href="{% url 'boards:boardpage' board.id 1 %}">{{ board.boardname }}&nbsp;&nbsp;<span class="gray">{{ board | posts_last_2_weeks }}</span></a>
+                              {% endif %}
+                              </li>
+                            {% else %}
+                              <li><a href="{% url 'boards:boardpage' board.id 1 %}">{{ board.boardname }}</a>
+                              </li>
+                            {% endif %}
+                          {% endfor %}  
+                        {% else %}
+                          &nbsp;No board yet
+                        {% endif %}
+                    </ul>
+                </li>
+                {% if user.is_admin %}
+                    <li><a href="{% url 'admin:index' %}">Admin</a></li> 
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'users:personalinfo' %}">Account</a></li>
+                    <li><a href="{% url 'users:logout' %}">Log out</a></li>
+                {% else %}
+                    <li><a href="{% url 'users:login' %}">Sign in</a></li>
+                    <li><a href="{% url 'users:signup' %}">Sign up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
