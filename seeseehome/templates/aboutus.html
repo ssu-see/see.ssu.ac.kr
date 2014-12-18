@@ -2,58 +2,39 @@
 {% block content %}
   {% include 'menu.html' %}
   {% load staticfiles %}
-  <hr>
+  
+  <div id="content-main" class="clearfix">
+    <div class="left">
+      <img src="{% static "img/seelogo.jpg" %}" alt="SEE Logo" width="100%">
+        <h2>안녕하세요? 전자전시회 홈페이지에 오신 것을 환영합니다.^^</h2>
+        숭실대학교 전자전시회(S.E.E)는 1971년 전자공학과 내 소모임으로 출발하여,
+        1978년 10월 제 1 회 전자전시회를 개최함으로써 본격적인 학회로서의 시작을
+        맞이하였습니다. 그리고 그 이래로 현재까지 전자전시회를 치루기까지
+        수 많은 어려움과 위기들이 우리에게 있었으나, 앎에 대한 순수한 열망과 새로운
+        지식을 탐구하고자 하는 노력이 지금까지 우리들을 지켜온 큰 원동력이 되었습니다. <br />
+        <br />
+        <strong>S</strong>.E.E는 전자/정보통신 공학의 종합적 시스템인 마이크로 로봇과 기타 시스템을
+        연구ㆍ제작하고, 기존의 이론과 기술을 모태로 새로운 기술을 연구 및 개발함으로써
+        이론과 실기를 겸비한 유능한 엔지니어가 되는 것을 그 목적으로 하는 정보통신
+        전자공학부 학회입니다. <br />
+        <br />
+        <strong>H</strong>ardware와 Software의 기본 지식을 중심으로 하여 Operating System, Network, Multimedia 등 다양한
+        분야를 접목ㆍ응용하여, 그에 대한 작품들을 제작하고 전시회를 개최하고 있습니다. <br />
+        <br />
+        <strong>H</strong>ardware는 여러가지 Micro Processor, Controller, DSP 등의 돕작 원리를 이해ㆍ응용
+        하여 Micro Mouse, Line Tracer, Robot Soccer 등을 제작하고, Digital, Analog에 대
+        한이론 들을 공부합니다. 최근에는 Arduino, Rasberry Pi를 같이 연구하고 있습니다. <br />
+        <br />
+        <strong>S</strong>oftware는 C/C++ language을 중심으로 Algorithm을 이해하고 적용합니다. 최근에는 모바일 연동을 위한 Android, 웹 구축을 위한 Python-Django, 게임개발을 위한 Unity 등을 사용하여 다양한 시도를 하고 있습니다. <br />
+        <br />
+        <b>&lt;전자전시회 학회방 위치&gt;</b> <br />
+        <img src="{% static "img/seelocation.jpg" %}" alt="SEE Map" width="100%">
+        <br />
+        형남공학관 5층 524호입니다.^^<br />
+      <hr>
+      <li> 신입생 가입 및 기타 연락 정보는 공지게시판에 게시되어있습니다</li>
 
-  <!-- I used space division by width="%", some image may be inserted in the space divided -->
-  <div id="left_of_page">
-    &nbsp;
-  </div>
-  <div id="middle_of_page">
-    <img src="{% static "img/seelogo.jpg" %}" alt="SEE Logo" width="100%">
-          <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                   <tr>
-                     <td>
-
-    <font face="돋움체">
-      <font size="6">안</font>녕하세요? 전자전시회 홈페이지에 오신 것을 환영합니다.^^<br>
-      숭실대학교 전자전시회(S.E.E)는 1971년 전자공학과 내 소모임으로 출발하여,
-      1978년 10월 제 1 회 전자전시회를 개최함으로써 본격적인 학회로서의 시작을
-      맞이하였습니다. 그리고 그 이래로 현재까지 전자전시회를 치루기까지
-      수 많은 어려움과 위기들이 우리에게 있었으나, 앎에 대한 순수한 열망과 새로운
-      지식을 탐구하고자 하는 노력이 지금까지 우리들을 지켜온 큰 원동력이 되었습니다. <br />
-      <br />
-      <b>S</b>.E.E는 전자/정보통신 공학의 종합적 시스템인 마이크로 로봇과 기타 시스템을
-      연구ㆍ제작하고, 기존의 이론과 기술을 모태로 새로운 기술을 연구 및 개발함으로써
-      이론과 실기를 겸비한 유능한 엔지니어가 되는 것을 그 목적으로 하는 정보통신
-      전자공학부 학회입니다. <br />
-      <br />
-      <b>H</b>ardware와 Software의 기본 지식을 중심으로 하여 Operating System, Network, Multimedia 등 다양한
-      분야를 접목ㆍ응용하여, 그에 대한 작품들을 제작하고 전시회를 개최하고 있습니다. <br />
-      <br />
-      <b>H</b>ardware는 여러가지 Micro Processor, Controller, DSP 등의 돕작 원리를 이해ㆍ응용
-      하여 Micro Mouse, Line Tracer, Robot Soccer 등을 제작하고, Digital, Analog에 대
-      한이론 들을 공부합니다. 최근에는 Arduino, Rasberry Pi를 같이 연구하고 있습니다. <br />
-      <br />
-      <b>S</b>oftware는 C/C++ language을 중심으로 Algorithm을 이해하고 적용합니다. 최근에는 모바일 연동을 위한 Android, 웹 구축을 위한 Python-Django, 게임개발을 위한 Unity 등을 사용하여 다양한 시도를 하고 있습니다. <br />
-      <br />
-      <b>&lt;전자전시회 학회방 위치&gt;</b> <br />
-      <img src="{% static "img/seelocation.jpg" %}" alt="SEE Map" width="100%">
-      <br />
-      형남공학관 5층 524호입니다.^^<br />
-    <hr>
-    <li> 신입생 가입 및 기타 연락 정보는 공지게시판에 게시되어있습니다</li>
-            </td>
-          </tr>
-      </tbody>
-    </table> 
-  </div>
-  <div id="right_of_page">
-    &nbsp;
+    </div>
+    
   </div>
 {% endblock %}

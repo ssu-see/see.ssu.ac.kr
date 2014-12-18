@@ -31,8 +31,8 @@ SECRET_KEY = 't6g+nq2ba%na%(fxbm%ino##c@4+pn&+68j5spm+!nu2e)*6^b'
 # SECURITY WARNING: don't run with debug turned on in production!
 # If you still need to server static locally (e.g. for testing without debug) you can run devserver in insecure mode:
 # python manage.py runserver 0.0.0.0:80 --insecure
-DEBUG = False
-TEMPLATE_DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = True
 
 #ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '220.149.86.220', 'see.ssu.ac.kr', '0.0.0.0']
@@ -86,7 +86,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
 #TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Seoul'
@@ -102,11 +102,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # This setting defines the additional locations
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'assets'),
+   os.path.join(BASE_DIR, 'static'),
+   os.path.join(BASE_DIR, 'assets'),
 )
 
 LOGIN_URL = "/login/"

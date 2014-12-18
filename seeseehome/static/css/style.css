@@ -1,0 +1,9 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+html, p, input {
+	font-family: '나눔고딕', 'NanumGothic', 'Nanum Gothic', serif;
+}
+#content-main {
+  max-width: 900px;margin: 20px auto;
+  background: white;
+}
