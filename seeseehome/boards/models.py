@@ -5,6 +5,7 @@ from users.models import User
 from seeseehome import msg
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
 from multiselectfield import MultiSelectField
+from cleartag import ClearTag
 
 class BoardManager(models.Manager):
 ##### CREATE
@@ -102,6 +103,9 @@ class Board(models.Model):
  
 
 class PostManager(models.Manager):
+    
+    clear = ClearTag()
+
     ##### CREATE
     def _create_post(self, board, writer, subject, **extra_fields):
         is_valid_content = False
@@ -121,12 +125,15 @@ class PostManager(models.Manager):
         if not is_valid_writer:
             raise ValidationError(msg.boards_writer_perm_error)
 
+#       subject escape
+        subject = PostManager.clear.clear_tag(subject)
 #       subject
         self.validate_subject(subject)
 
 #       content
         if 'content' in extra_fields:
             content = extra_fields['content']
+            subject = PostManager.clear.clear_tag(content)
             is_valid_content = self.validate_content(content)
 
 #       post save ( caution : board is not parameter for post model )
