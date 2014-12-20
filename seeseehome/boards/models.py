@@ -74,24 +74,24 @@ class Board(models.Model):
     """
     readperm = MultiSelectField(
                     help_text = ('Available Read Permission (It is possible'
-                    ' to select multiple[ User, Member, '
+                    ' to select multiple[None, User, Member, '
                     'Core member, Graduate, President ]'),
-                    choices = (('1', 'User'), ('2', 'Member'), 
+                    choices = (('0', 'None'), ('1', 'User'), ('2', 'Member'), 
                         ('3', 'Core member'), ('4', 'Graduate'), 
                         ('5', 'President')),
-                    default = ['1','2','3','4','5'],
+                    default = ['0', '1','2','3','4','5'],
                     max_length = 9,
                     max_choices=5,
                )
                    
     writeperm = MultiSelectField(
                     help_text = ('Available Write Permission (It is possible'
-                    'to select multiple[ User, Member, '
+                    'to select multiple[None, User, Member, '
                     'Core member, Graduate, President ]'),
                     choices = (('1', 'User'), ('2', 'Member'), 
                         ('3', 'Core member'), ('4', 'Graduate'), 
                         ('5', 'President')),
-                    default = ['1', '2', '3', '4', '5'],
+                    default = ['0', '1', '2', '3', '4', '5'],
                     max_length = 9,
                     max_choices=5,
                )

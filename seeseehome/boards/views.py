@@ -95,7 +95,7 @@ def write(request, board_id, **extra_fields):
     return render(request, "boards/write.html", {'boardlist' : boardlist,
             'board' : board})
 
-#@login_required
+@login_required
 def rewrite(request, board_id, post_id):
     board = Board.objects.get_board(board_id)
 #    boardposts = BoardPosts.objects.filter(board=board)

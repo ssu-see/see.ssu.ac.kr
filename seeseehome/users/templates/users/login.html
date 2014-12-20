@@ -1,22 +1,63 @@
-{% extends "base.html" %}
+{% extends "template.html" %}
+{% load staticfiles %}
+
 {% block content %}
-  {% include 'menu.html' %} 
-  <!-- Custom styles for this template -->
-    <div class="container">
-      <form class="form-signin" role="form" method="POST">{% csrf_token %}
-        <h2 class="form-signin-heading">Log in</h2>
-          {% if next %}
-            <form action="/login/?next={{next}}" method="POST">{% csrf_token %}
-          {% else %}
-            <form method="POST">{% csrf_token %}
-              <label for="inputEmail" class="sr-only">User name or Email</label>
-              <input name="username" type="text" id="inputEmail" class="form-control" placeholder="Enter User name or Email" maxlength="64" required autofocus>
-              <label for="inputPassword" class="sr-only">Password</label>
-              <input name="pwd" type="password" id="inputPassword" class="form-control" placeholder="Enter Password" maxlength="255" required>
-              <input class="btn btn-lg btn-primary btn-block" name="login_submit" type="submit" value="Log in"></input>
-            </form>
-          {% endif %}
-      </form>
-    </div> <!-- /container -->
+  {% include 'template_menu.html' %} 
+    <div id="sign_in2">
+        <div class="container">
+            <div class="section_header">
+                <h3>Sign in</h3>
+            </div>
+            <div class="row login">
+                <div class="col-sm-5 left_box">
+                    <h4>Log in to your account</h4>
+
+                    <div class="perk_box">
+                        <div class="perk">
+                            <span class="icos ico1"></span>
+                            <p><strong>Lorem alteration</strong> in some form  injected humour these randomised words .</p>
+                        </div>
+                        <div class="perk">
+                            <span class="icos ico2"></span>
+                            <p><strong>There are many variations</strong> of passages of Lorem alteration in some form  injected humour these randomised words.</p>
+                        </div>
+                        <div class="perk">
+                            <span class="icos ico3"></span>
+                            <p><strong>Alteration in some form</strong> injected humour these randomised words.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 signin_box">
+                    <div class="box">
+                        <div class="box_cont">
+
+                            <div class="form">
+                                {% if next %}
+                                <form action="/login/?next={{next}}" method="POST">
+                                {% else %}
+                                <form action="/login/" method="POST">
+                                {% endif %}
+                                {% csrf_token %}
+                                    <input type="text" placeholder="Email or Username" name="username" class="form-control">
+                                    <input type="password" placeholder="Password" name="pwd" class="form-control">
+                                    <div class="forgot">
+                                        <span>Don’t have an account?</span>
+                                        <a href="{% url 'users:signup' %}">Sign up</a>
+                                    </div>
+                                    <input type="submit" value="sign in">
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+{% endblock %}
+
+{% block stylesheet%}
+<link rel="stylesheet" href="{% static 'css/compiled/sign-in.css' %}" media="screen" />
 {% endblock %}
 
