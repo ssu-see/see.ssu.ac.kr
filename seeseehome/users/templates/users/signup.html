@@ -1,27 +1,64 @@
-{% extends "base.html" %}
+{% extends "template.html" %}
+{% load staticfiles %}
+
 {% block content %}
-  {% include 'menu.html' %}
-  <!-- Custom styles for this template -->
-    <div class="container">
-      <form class="form-signin" role="form" method="POST">{% csrf_token %}
-        <h2 class="form-signin-heading">Sign up</h2>
-        <label for="inputEmail" class="sr-only">User name</label>
-        <input name="username" type="text" id="inputEmail" class="form-control" placeholder="Enter User name" maxlength="30" required autofocus>
+  {% include 'template_menu.html' %}
+    <div id="sign_up2">
+        <div class="container">
+            <div class="section_header">
+                <h3>Sign up</h3>
+            </div>
+            <div class="row login">
+                <div class="col-sm-5 left_box">
+                    <h4>Create your account</h4>
 
-        <label for="inputEmail" class="sr-only">Email</label>
-        <input name="email" type="email" id="inputEmail" class="form-control" placeholder="Enter Email" maxlength="64" required>
+                    <div class="perk_box">
+                        <div class="perk">
+                            <span class="icos ico1"></span>
+                            <p><strong>Lorem alteration</strong> in some form  injected humour these randomised words .</p>
+                        </div>
+                        <div class="perk">
+                            <span class="icos ico2"></span>
+                            <p><strong>There are many variations</strong> of passages of Lorem alteration in some form  injected humour these randomised words.</p>
+                        </div>
+                        <div class="perk">
+                            <span class="icos ico3"></span>
+                            <p><strong>Alteration in some form</strong> injected humour these randomised words.</p>
+                        </div>
+                    </div>
+                </div>
 
-        <label for="inputEmail" class="sr-only">Contact number</label>
-        <input name="contact_number" type="text" id="inputEmail" class="form-control" placeholder="Enter Contact number (Optional)" maxlength="30" >
+                <div class="col-sm-6 signin_box">
+                    <div class="box">
+                        <div class="box_cont">
+                            <div class="form">
+                                <form action="{% url 'users:signup' %}" method="POST">{% csrf_token %}
+                                    <input name="username" type="text" class="form-control" placeholder="Enter User name" maxlength="30" required autofocus>
+                                    <input name="email" type="text" class="form-control" placeholder="Enter Email" maxlength="64" required>
+                                    <input name="contact_number" type="text" class="form-control" placeholder="Enter Contact number (Optional)" maxlength="30" >
+                                    <input name="pwd" type="password" class="form-control" placeholder="Enter Password" maxlength="255" required>
+                                    <input name="confirm_pwd" type="password" class="form-control" placeholder="Confirm Your Password" maxlength="255" required>
 
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input name="pwd" type="password" id="inputPassword" class="form-control" placeholder="Enter Password" maxlength="255" required>
+                                  <!--   <input type="text" placeholder="Email" class="form-control">
+                                    <input type="text" placeholder="Password" class="form-control">
+                                    <input type="text" placeholder="Confirm Password" class="form-control"> -->
+                                    <div class="forgot">
+                                        <span>Already have an account?</span>
+                                        <a href="sign-in">Sign in</a>
+                                    </div>
+                                    <input type="submit" value="sign up">
+                                </form>
+                            </div>
 
-        <label for="inputPassword" class="sr-only">Password Confirmation</label>
-        <input name="confirm_pwd" type="password" id="inputPassword" class="form-control" placeholder="Confirm Your Password" maxlength="255" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
 
-        <input class="btn btn-lg btn-primary btn-block" name="signup_submit" type="submit" value="Sign up"></input>
-      </form>
-    </div> <!-- /container -->
 {% endblock %}
 
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/compiled/sign-up.css' %}" media="screen" />
+{% endblock %}

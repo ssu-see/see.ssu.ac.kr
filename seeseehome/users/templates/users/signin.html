@@ -34,9 +34,9 @@
 
                             <div class="form">
                                 {% if next %}
-                                <form action="/login/?next={{next}}" method="POST">
+                                <form action="{%url 'users:signin' %}?next={{next}}" method="POST">
                                 {% else %}
-                                <form action="/login/" method="POST">
+                                <form action="{%url 'users:signin' %}" method="POST">
                                 {% endif %}
                                 {% csrf_token %}
                                     <input type="text" placeholder="Email or Username" name="username" class="form-control">

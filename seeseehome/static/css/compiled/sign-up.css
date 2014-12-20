@@ -257,7 +257,7 @@
         font-size: 17px; }
     #sign_up2 .signin_box .box .form form {
       margin: 0; }
-    #sign_up2 .signin_box .box .form input[type="text"] {
+    #sign_up2 .signin_box .box .form input {
       border-radius: 3px;
       font-size: 16px;
       margin-bottom: 16px;

@@ -110,7 +110,7 @@ STATICFILES_DIRS = (
    os.path.join(BASE_DIR, 'assets'),
 )
 
-LOGIN_URL = "/login/"
+LOGIN_URL = "/sign-in/"
 # If next isn't provided, it redirects to
 LOGIN_REDIRECT_URL = "/"
 

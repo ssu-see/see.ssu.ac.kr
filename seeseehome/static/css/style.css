@@ -11,3 +11,7 @@ html, p, input {
 .gray {
 	color: #AAA;
 }
+
+.navbar.navbar-inverse {
+	background: rgba(0, 50, 100, 0.4);
+}

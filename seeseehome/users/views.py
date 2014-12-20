@@ -26,7 +26,7 @@ def authenticate(username=None, password=None):
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         return user
 
-def login(request):
+def signin(request):
 #	If is the user already logged in?
 
     if request.user.is_authenticated():
@@ -55,10 +55,13 @@ def login(request):
         else:
             messages.error(request, msg.users_login_error)
             messages.info(request, msg.users_invalid)
-            return HttpResponseRedirect(reverse("users:login"))
- 
-    boardlist = Board.objects.all()
-    return render(request, "users/login.html", {'boardlist' : boardlist})
+            return HttpResponseRedirect(reverse("users:singin"))
+    else:
+        next = ''
+        if 'next' in request.GET:
+            next = request.GET['next']
+            
+        return render(request, "users/signin.html", {'next' : next})
 
 def logout(request):
     if request.user.__class__.__name__ is 'AnonymousUser':
@@ -151,7 +154,7 @@ def signup(request):
 
         messages.success(request, msg.users_signup_success)
         messages.info(request, msg.users_signup_success_info)
-        return HttpResponseRedirect(reverse("users:login"))
+        return HttpResponseRedirect(reverse("users:singin"))
 
     boardlist = Board.objects.all()
     return render(request, "users/signup.html", {'boardlist' : boardlist})
@@ -277,7 +280,7 @@ def editpassword(request):
         _logout(request)
         messages.success(request, msg.users_change_pwd_success)
         messages.info(request, msg.users_change_pwd_success_info)
-        return HttpResponseRedirect(reverse("users:login"))
+        return HttpResponseRedirect(reverse("users:singin"))
 
     boardlist = Board.objects.all()
     return render(request, "users/editpwd.html", {'boardlist' : boardlist})
