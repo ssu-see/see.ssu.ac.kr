@@ -110,7 +110,7 @@ def rewrite(request, board_id, post_id):
 
     boardlist = Board.objects.all()
 
-    return render(request, "boards/rewrite.html",
+    return render(request, "boards/write.html",
             {'board' : board, 'post' : post, 'boardlist' : boardlist})
 
 def postpage(request, board_id, post_id):

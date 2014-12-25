@@ -196,7 +196,7 @@ class PostManager(models.Manager):
         if 'content' in extra_fields:
             post.content = PostManager.clear.clear_tag(extra_fields['content'])
         if 'is_notice' in extra_fields:
-            post.is_notice = PostManager.clear.clear_taga(extra_fields['is_notice'])
+            post.is_notice = extra_fields['is_notice']
 
         post.save()
 

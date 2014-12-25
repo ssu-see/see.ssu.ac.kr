@@ -3,18 +3,23 @@
 {% block content %}
 {% include "template_menu.html" %}
 <div class="container">
-  <form method="POST">{% csrf_token %}
+  {% if post %}
+  <form method="POST" action="{% url 'boards:rewrite' board.id post.id %}">
+  {% else %}
+  <form method="POST" action="{% url 'boards:write' board.id %}">
+  {% endif %}
+    {% csrf_token %}
     <div class="form-group">
       <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
       <div class="input-group">
         <div class="input-group-addon">제목</div>
-        <input class="form-control" name="subject" type="text" placeholder="Enter Subject" maxlength="255" onkeydown="if (event.keyCode == 13) {return false;}" required autofocus>
+        <input class="form-control" name="subject" type="text" placeholder="Enter Subject" value="{{ post.subject }}" maxlength="255" onkeydown="if (event.keyCode == 13) {return false;}" required autofocus>
         <div class="input-group-addon"><input type='checkbox' id="inlineCheckbox1" value="option1" name='is_notice'> Is notice?</div>
       </div>
     </div>
     <div>
       <div class="django-ckeditor-widget inline-block" data-field-id="id_content" style="width: 100%;">
-        <textarea id="id_content" maxlength="65535" name="content" rows="10" data-processed="0" style="width: 100%; height: 500px;" data-config='{"filebrowserWindowWidth": 940, "toolbar_Basic": [["Source", "-", "Bold", "Italic"]], "language": "en-us", "toolbar_Full": [["Styles", "Format", "Bold", "Italic", "Underline", "Strike", "SpellChecker", "Undo", "Redo"], ["Image", "Table", "HorizontalRule"], ["TextColor", "BGColor"], ["Smiley", "SpecialChar"], ["Source"]], "filebrowserUploadUrl": "/ckeditor/upload/", "height": 500, "filebrowserBrowseUrl": "/ckeditor/browse/", "skin": "moono", "filebrowserWindowHeight": 725, "toolbar": "Full"}' data-id="id_content" data-type="ckeditortype"></textarea>
+        <textarea id="id_content" maxlength="65535" name="content" rows="10" data-processed="0" style="width: 100%; height: 500px;" data-config='{"filebrowserWindowWidth": 940, "toolbar_Basic": [["Source", "-", "Bold", "Italic"]], "language": "en-us", "toolbar_Full": [["Styles", "Format", "Bold", "Italic", "Underline", "Strike", "SpellChecker", "Undo", "Redo"], ["Image", "Table", "HorizontalRule"], ["TextColor", "BGColor"], ["Smiley", "SpecialChar"], ["Source"]], "filebrowserUploadUrl": "/ckeditor/upload/", "height": 500, "filebrowserBrowseUrl": "/ckeditor/browse/", "skin": "moono", "filebrowserWindowHeight": 725, "toolbar": "Full"}' data-id="id_content" data-type="ckeditortype">{{ post.content|default:'' }}</textarea>
       </div>
     </div>
     <div class="text-center" style="margin-top: 50px;">
