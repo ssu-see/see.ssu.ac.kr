@@ -140,13 +140,14 @@ def postpage(request, board_id, post_id):
             {'board' : board, 'post' : post, 'boardlist' : boardlist,
                 'commentlist' : commentlist})
 
-def pagination(posts, posts_per_page=10, page=1):
+def pagination(posts, posts_per_page = 10, page = 1):
 #   posts per page
     start_pos = (int(page)-1) * posts_per_page
     end_pos = start_pos + posts_per_page
     posts_of_present_page = posts[start_pos : end_pos]
 
     paginator = Paginator(posts, posts_per_page).page(page)
+
     has_next = paginator.has_next()
     has_previous = paginator.has_previous()
     nextpage = page
@@ -228,9 +229,9 @@ def boardpage(request, board_id, page=1):
     posts = posts.order_by("-is_notice")
 #   if page does not exist, then raise 404
     try:    
-        custom_paginator = pagination(posts=posts, posts_per_page = 10,
-                            page=page)
-    except:
+        custom_paginator = pagination(posts=posts, posts_per_page = 10, page=page)
+    except Exception as e:
+        print(e)
         raise Http404
 
 #   for board list of menu bar

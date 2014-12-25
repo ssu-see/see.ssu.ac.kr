@@ -2,80 +2,141 @@
 {% block content %}
   {% include 'template_menu.html' %}
   {% load boards_custom_tags %}
-
-    <div class="col-sm-3 col-md-2 sidebar">
-      <ul class="nav nav-sidebar">
-      </ul>
-      <ul class="nav nav-sidebar">
-        <li class="active"><a href="{% url 'boards:write' board.id %}">Write<span class="sr-only">(current)</span></a></li>
-        <li><a href="{% url 'boards:boardpage' board.id 1 %}">Go back to board</a></li>
-
-        <form action="" method="POST">{% csrf_token %}
-          <li><input class="form-control" type="text" name="search_post" placeholder="Search Post"></li>
-          <select class="form-control" name="select_post">
-            <option selected="subname">subject</option>
-            <option>content</option>
-            <option>subject + content</option>
-            <option>writer</option>
-          </select>
-          </form>
-
-        {% if has_previous %}
-          <li><a href="{% url 'boards:boardpage' board.id previous_page %}">Prev</a></li>
-        {% endif %}
+    <style>
+    .board-table {
+      border-top: 2px solid #ddd;
+    }
+    .board-table .number {
+      width: 65px;
+      text-align: center;
+    }
+    .board-table .subject {
+    }
     
-        {% if has_next %}
-          <li><a href="{% url 'boards:boardpage' board.id nextpage %}">Next</a></li>
-        {% endif %}
-      </ul>
-    </div>
+    .board-table .writer {
+      width: 90px;
+      text-align: center;
+      font-size: 11px;
+      color: #555;
+    }
 
-    <div class="container-fluid">
-      <div class="row">
-       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-         <h1 class="page-header">{{ board.boardname }}
-           {% if top50 and searchvalue %}
-             {{ top50 }} : "{{searchvalue}}" 
-           {% endif %}
-         </h1>
+    .board-table .date {
+      width: 85px;
+      text-align: center;
+      font-size: 11px;
+      color: #555;
+    }
+    .board-table .hits {
+      width: 65px;
+      text-align: center;
+      font-size: 11px;
+      color: #555;
+    }
+    .search-range {
+      width: 98px !important;
+    }
+    .board-search {
+      max-width: 380px;
+      float: right;
+      
+    }
+    .board-footer-list {
+      margin: 10px 0;
+    }
+    </style>
+    <div class="container">
+     <h3 class="page-header">{{ board.boardname }}
+       {% if top50 and searchvalue %}
+         {{ top50 }} : "{{searchvalue}}" 
+       {% endif %}
+     </h3>
 
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th width="5%"></th>
-                  <th width="65%">Subject</th>
-                  <th width="10%">Writer</th>
-                  <th width="20%">Date posted</th>
-                </tr>
-              </thead>
-              <tbody>
+      <div class="table-responsive">
+        <table class="table table-striped board-table">
+          <thead>
+            <tr>
+              <th class="number">no</th>
+              <th class="subject">subject</th>
+              <th class="writer">writer</th>
+              <th class="date">date</th>
+              <th class="hits">hits</th>
+            </tr>
+          </thead>
+          <tbody>
 
-                {% if posts %}
-                 {% for post in posts %}
-                   <tr>
-                     <td width="5%">
-                       {% if post.is_notice %}
-                         <div type="button" class="btn btn-default btn-xs">Notice</div>
-                       {% endif %}
-                     </td>
-                     <td width="65%"><a href="{% url 'boards:postpage' board.id post.id %}">{{ post.subject }}</a>
-                       {% if post|num_of_comments_in_post %}
-                         &nbsp;<font color="brown">{{ post|num_of_comments_in_post }}</font>
-                       {% endif %}
-                    </td>
-                     <td width="10%">{{ post.writer.username }}</td>
-                     <td width="20%">{{ post.date_posted }}</td>
-                   </tr>
-                 {% endfor %}  
-                 {% endif %}
-               </tbody>
-            </table>
+            {% if posts %}
+             {% for post in posts %}
+               <tr>
+                 <td class="number">
+                   {% if post.is_notice %}
+                     <div type="button" class="btn btn-default btn-xs">Notice</div>
+                   {% else%}
+                      <div>{{ forloop.counter }}</div>
+                   {% endif %}
+                 </td>
+                 <td class="subject"><a href="{% url 'boards:postpage' board.id post.id %}"><span>{{ post.subject }}</span></a>
+                   {% if post|num_of_comments_in_post %}
+                     &nbsp;<font color="brown">{{ post|num_of_comments_in_post }}</font>
+                   {% endif %}
+                </td>
+                 <td class="writer">{{ post.writer.username }}</td>
+                 <td class="date">{{ post.date_posted | date:"Y.m.d"}}</td>
+                 <td class="hits">100</td>
+               </tr>
+             {% endfor %}  
+             {% endif %}
+           </tbody>
+        </table>
+      </div>
+      <div class="clearfix">
+        <a href="{% url 'boards:write' board.id %}" class="btn btn-default fr"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Write</a>
+      </div>
+    
+      <div class="text-center board-footer-list">
+        <div class="btn-toolbar inline-block" role="toolbar">
+          <div class="btn-group btn-group-sm" role="group">
+            {% if has_previous %}
+              <a href="{% url 'boards:boardpage' board.id previous_page %}" class="btn btn-default">Prev</a>
+            {% else %}
+              <a href="{% url 'boards:boardpage' board.id 1 %}" class="btn btn-default">Prev</a>
+            {% endif %}
           </div>
+          <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <a href="" class="btn btn-default active">1</a>
+            <a href="" class="btn btn-default">2</a>
+            <a href="" class="btn btn-default">3</a>
+            <a href="" class="btn btn-default">4</a>
+            <a href="" class="btn btn-default">5</a>
+          </div>
+          {% if has_next %}
+            <div class="btn-group btn-group-sm" role="group">
+              <a href="{% url 'boards:boardpage' board.id nextpage %}" class="btn btn-default">Next</a>
+            </div>
+          {% endif %}
         </div>
       </div>
+      <div class="clearfix">
+        <form action="" method="GET">
+          <div class="board-search">
+            <div class="input-group">
+              <div class="input-group-btn">
+                <select class="form-control search-range" name="select_post">
+                  <option selected="subname">subject</option>
+                  <option>content</option>
+                  <option>subject + content</option>
+                  <option>writer</option>
+                </select>
+              </div>
+              <input class="form-control" type="text" name="search_post" placeholder="Search Post">
+              <div class="input-group-btn">
+                <div class="btn btn-default">search</div>
+              </div>
+              
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-
 
 {% endblock %}
 

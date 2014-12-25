@@ -127,14 +127,16 @@ class PostManager(models.Manager):
 
 #       subject escape
         subject = PostManager.clear.clear_tag(subject)
+
 #       subject
         self.validate_subject(subject)
 
 #       content
         if 'content' in extra_fields:
             content = extra_fields['content']
-            subject = PostManager.clear.clear_tag(content)
+            content = PostManager.clear.clear_tag(content) # escape content
             is_valid_content = self.validate_content(content)
+        print(extra_fields)
 
 #       post save ( caution : board is not parameter for post model )
         post = self.model(board=board, writer=writer, subject=subject)
@@ -190,11 +192,11 @@ class PostManager(models.Manager):
     def update_post(self, post_id, **extra_fields):
         post = Post.objects.get_post(post_id)
         if 'subject' in extra_fields:
-            post.subject = extra_fields['subject']
+            post.subject = PostManager.clear.clear_tag(extra_fields['subject'])
         if 'content' in extra_fields:
-            post.content = extra_fields['content']
+            post.content = PostManager.clear.clear_tag(extra_fields['content'])
         if 'is_notice' in extra_fields:
-            post.is_notice = extra_fields['is_notice']
+            post.is_notice = PostManager.clear.clear_taga(extra_fields['is_notice'])
 
         post.save()
 
