@@ -228,7 +228,9 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.username
-
+        
+    def is_superuser(self):
+        return is_admin
     """
     The following two method 'has_perm', 'has_module_perms' is important to 
     access built-in admin site.

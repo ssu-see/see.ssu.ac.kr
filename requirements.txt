@@ -10,3 +10,4 @@ pep8==1.5.7
 pytz==2014.4
 six==1.7.3
 wsgiref==0.1.2
+Pillow==2.6.1

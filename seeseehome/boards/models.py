@@ -200,6 +200,11 @@ class PostManager(models.Manager):
 
         post.save()
 
+    def hit_count(self, post_id):
+        post = Post.objects.get_post(post_id)
+        post.hit_count += 1
+        post.save()
+
 class Post(models.Model):
     objects = PostManager()
     writer = models.ForeignKey(User)
@@ -223,6 +228,11 @@ class Post(models.Model):
     is_notice = models.BooleanField(
                     help_text = "Is this post a notice?",
                     default=False
+                )
+    
+    hit_count = models.IntegerField(
+                    help_text = "counting of watched",
+                    default = 0,
                 )
 
 #   for showing post information instead of object itself

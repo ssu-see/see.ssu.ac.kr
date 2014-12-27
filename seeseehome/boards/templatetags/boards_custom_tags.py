@@ -29,4 +29,3 @@ def posts_last_3_days(board):
                              date_posted__range = (start_date, end_date)
                             )
     return posts_last_3_days.count()
-

@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-
+import settings
 # Caution : Never upload sercurity_information file anywhere 
 try:
   from seeseehome import security_information
@@ -32,3 +32,7 @@ urlpatterns = patterns('',
 
 
 )
+
+if settings.MEDIA_ENABLED:
+    urlpatterns += patterns("",
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}))

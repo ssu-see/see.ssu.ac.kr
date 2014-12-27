@@ -63,16 +63,32 @@
             </tr>
           </thead>
           <tbody>
-
-            {% if posts %}
-             {% for post in posts %}
-               <tr>
+            {% if notices %}
+              {% for notice in notices %}
+                <tr>
                  <td class="number">
-                   {% if post.is_notice %}
+                   {% if notice.is_notice %}
                      <div type="button" class="btn btn-default btn-xs">Notice</div>
                    {% else%}
                       <div>{{ forloop.counter }}</div>
                    {% endif %}
+                 </td>
+                 <td class="subject"><a href="{% url 'boards:postpage' board.id notice.id %}"><span>{{ notice.subject }}</span></a>
+                   {% if notice|num_of_comments_in_post %}
+                     &nbsp;<font color="brown">{{ notice|num_of_comments_in_post }}</font>
+                   {% endif %}
+                </td>
+                 <td class="writer">{{ notice.writer.username }}</td>
+                 <td class="date">{{ notice.date_posted | date:"Y.m.d"}}</td>
+                 <td class="hits">{{ notice.hit_count }}</td>
+               </tr>
+               {% endfor %}
+            {% endif %}
+            {% if posts %}
+             {% for post in posts %}
+               <tr>
+                 <td class="number">
+                    <div>{{ forloop.counter|add:post_base_index}}</div>
                  </td>
                  <td class="subject"><a href="{% url 'boards:postpage' board.id post.id %}"><span>{{ post.subject }}</span></a>
                    {% if post|num_of_comments_in_post %}
@@ -81,7 +97,7 @@
                 </td>
                  <td class="writer">{{ post.writer.username }}</td>
                  <td class="date">{{ post.date_posted | date:"Y.m.d"}}</td>
-                 <td class="hits">100</td>
+                 <td class="hits">{{ post.hit_count }}</td>
                </tr>
              {% endfor %}  
              {% endif %}
@@ -95,24 +111,22 @@
       <div class="text-center board-footer-list">
         <div class="btn-toolbar inline-block" role="toolbar">
           <div class="btn-group btn-group-sm" role="group">
-            {% if has_previous %}
-              <a href="{% url 'boards:boardpage' board.id previous_page %}" class="btn btn-default">Prev</a>
-            {% else %}
-              <a href="{% url 'boards:boardpage' board.id 1 %}" class="btn btn-default">Prev</a>
+            {% if has_previous_10 or has_next_10 %}
+            <a href="{% url 'boards:boardpage' board.id previous_10_page_num %}" class="btn btn-default" {% if not has_previous_10 %}disabled {% endif %}>Prev 10</a>
             {% endif %}
+              <a href="{% url 'boards:boardpage' board.id previous_page_num %}" class="btn btn-default" {% if not has_previous %}disabled {% endif %}>Prev</a>
           </div>
-          <div class="btn-group btn-group-sm" role="group" aria-label="...">
-            <a href="" class="btn btn-default active">1</a>
-            <a href="" class="btn btn-default">2</a>
-            <a href="" class="btn btn-default">3</a>
-            <a href="" class="btn btn-default">4</a>
-            <a href="" class="btn btn-default">5</a>
+          <div class="btn-group btn-group-sm" role="group">
+            {% for page_num in page_range %}
+            <a href="{% url 'boards:boardpage' board.id page_num %}" class="btn btn-default {%if current_page_num == page_num%}active{%endif%}">{{page_num}}</a>
+            {% endfor %}
           </div>
-          {% if has_next %}
             <div class="btn-group btn-group-sm" role="group">
-              <a href="{% url 'boards:boardpage' board.id nextpage %}" class="btn btn-default">Next</a>
+              <a href="{% url 'boards:boardpage' board.id next_page_num %}" class="btn btn-default" {% if not has_next %}disabled {% endif %}>Next</a>
+              {% if has_previous_10 or has_next_10 %}
+              <a href="{% url 'boards:boardpage' board.id next_10_page_num %}" class="btn btn-default" {% if not has_next_10 %}disabled {% endif %}>Next 10</a>
+              {% endif %}
             </div>
-          {% endif %}
         </div>
       </div>
       <div class="clearfix">

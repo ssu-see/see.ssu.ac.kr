@@ -47,7 +47,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
 #   Custom apps
     'users',
     'boards',
@@ -116,10 +115,24 @@ LOGIN_REDIRECT_URL = "/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ENABLED = True
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_IMAGE_BACKEND = "pillow"
 CKEDITOR_JQUERY_URL = \
-    '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+    '/static/js/jquery-latest.js'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar' : [["Styles", "Format", "Bold", "Italic", "Underline", "Strike", "SpellChecker", "Undo", "Redo"], ["Link", "Unlink", "Anchor"], ["Image", "Table", "HorizontalRule"], ["TextColor", "BGColor"], ["Smiley", "SpecialChar"], ["Source"]],
+        'language': 'ko-kr',
+    },
+}
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'language': 'ko-kr',
+    },
+}
 
 # specify the custom model as the default user model
 AUTH_USER_MODEL = 'users.User'

@@ -92,8 +92,7 @@ def write(request, board_id, **extra_fields):
 
     boardlist = Board.objects.all()
 
-    return render(request, "boards/write.html", {'boardlist' : boardlist,
-            'board' : board})
+    return render(request, "boards/write.html", {'boardlist' : boardlist, 'board' : board})
 
 @login_required
 def rewrite(request, board_id, post_id):
@@ -116,6 +115,7 @@ def rewrite(request, board_id, post_id):
 def postpage(request, board_id, post_id):
     board = Board.objects.get_board(board_id)
     post = Post.objects.get_post(post_id) 
+    Post.objects.hit_count(post.id)
 
     if request.method == "POST":
         comment = request.POST['comment']
@@ -140,30 +140,50 @@ def postpage(request, board_id, post_id):
             {'board' : board, 'post' : post, 'boardlist' : boardlist,
                 'commentlist' : commentlist})
 
-def pagination(posts, posts_per_page = 10, page = 1):
+def pagination(posts, posts_per_page = 10, page_num = 1):
 #   posts per page
-    start_pos = (int(page)-1) * posts_per_page
+    start_pos = (page_num - 1) * posts_per_page
     end_pos = start_pos + posts_per_page
     posts_of_present_page = posts[start_pos : end_pos]
 
-    paginator = Paginator(posts, posts_per_page).page(page)
+    paginator = Paginator(posts, posts_per_page)
+    p = paginator.page(page_num)
 
-    has_next = paginator.has_next()
-    has_previous = paginator.has_previous()
-    nextpage = page
-    previous_page = page
+    has_next = p.has_next()
+    has_previous = p.has_previous()
+
     if has_next:
-        nextpage = paginator.next_page_number()
+        next_page_num = p.next_page_number()
+    else:
+        next_page_num = page_num
+
     if has_previous:
-        previous_page = paginator.previous_page_number()
+        previous_page_num = p.previous_page_number()
+    else:
+        previous_page_num = page_num
+
+    next_10_page_num = page_num + 10 if page_num + 10 < paginator.num_pages else paginator.num_pages
+    previous_10_page_num = page_num - 10 if page_num - 10 > 1 else 1
+    
+    page_range = paginator.page_range
+
+    if page_num % 10 == 0:
+        page_range = paginator.page_range[(int(page_num / 10) - 1) * 10: (int(page_num / 10) - 1) * 10 + 10]
+    else:
+        page_range = paginator.page_range[int(page_num / 10) * 10: int(page_num / 10) * 10 + 10]
 
     custom_paginator = {
                                'posts' : posts_of_present_page,
-                               'paginator' : paginator,
+                               'paginator' : p,
+                               'page_range' : page_range,
                                'has_next' : has_next,
+                               'has_next_10' : paginator.num_pages >= page_num + 10,
                                'has_previous' : has_previous,
-                               'nextpage' : nextpage,
-                               'previous_page' : previous_page,
+                               'has_previous_10' : 0 < page_num - 10,
+                               'next_10_page_num' : next_10_page_num,
+                               'next_page_num' : next_page_num,
+                               'previous_10_page_num' : previous_10_page_num,
+                               'previous_page_num' : previous_page_num,
                        }
     return custom_paginator
 
@@ -175,7 +195,13 @@ def boardpage(request, board_id, page=1):
 
 #   reader : for is_valid_readperm
     reader = User.objects.get_user(request.user.id)
+    posts_per_page = 10
 
+    try:
+        page = int(page)
+    except:
+        raise Http404
+    
 #   Does the writer has valid write permission?
     if not Board.objects.is_valid_readperm(
            board = board, reader = reader):
@@ -226,27 +252,36 @@ def boardpage(request, board_id, page=1):
     All posts are listed in order by posted date.
     But First of all, notice post will be listed.
     """
-    posts = posts.order_by("-is_notice")
+    notices = posts.filter(is_notice = 1)
+    posts = posts.filter(is_notice = 0)
+
 #   if page does not exist, then raise 404
     try:    
-        custom_paginator = pagination(posts=posts, posts_per_page = 10, page=page)
+        custom_paginator = pagination(posts=posts, posts_per_page = posts_per_page, page_num=page)
     except Exception as e:
         print(e)
         raise Http404
 
 #   for board list of menu bar
     boardlist = Board.objects.all()
-
     return render(request, "boards/boardpage.html", 
                {
                    'board' : board,
                    'boardlist' : boardlist,
+                   'notices' : notices,
+                   'post_base_index': (posts_per_page * (page - 1)),
                    'posts' : custom_paginator['posts'],
                    'paginator' :custom_paginator['paginator'],
                    'has_next' : custom_paginator['has_next'],
+                   'has_next_10' : custom_paginator['has_next_10'],
+                   'current_page_num' : page,
                    'has_previous' : custom_paginator['has_previous'],
-                   'nextpage' : custom_paginator['nextpage'],
-                   'previous_page' : custom_paginator['previous_page'],
+                   'has_previous_10' : custom_paginator['has_previous_10'],
+                   'page_range' : custom_paginator['page_range'],
+                   'next_page_num' : custom_paginator['next_page_num'],
+                   'previous_page_num' : custom_paginator['previous_page_num'],
+                   'next_10_page_num' : custom_paginator['next_10_page_num'],
+                   'previous_10_page_num' : custom_paginator['previous_10_page_num'],
                }
            )
 
