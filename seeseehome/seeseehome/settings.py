@@ -123,14 +123,17 @@ CKEDITOR_JQUERY_URL = \
 
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar' : [["Styles", "Format", "Bold", "Italic", "Underline", "Strike", "SpellChecker", "Undo", "Redo"], ["Link", "Unlink", "Anchor"], ["Image", "Table", "HorizontalRule"], ["TextColor", "BGColor"], ["Smiley", "SpecialChar"], ["Source"]],
+        'toolbar_Full' : [
+            ["Styles", "Format", "Bold", "Italic", "Underline", "Strike", "SpellChecker", "Undo", "Redo"],
+            ["Link", "Unlink", "Anchor"],
+            ["attachment", "Image", "Table", "HorizontalRule"],
+            ["TextColor", "BGColor"],
+            ["Smiley", "SpecialChar"],
+            ["Source"]
+            ],
         'language': 'ko-kr',
-    },
-}
-
-CKEDITOR_CONFIGS = {
-    'default': {
-        'language': 'ko-kr',
+        'width' : '100%',
+        'height': '400px',
     },
 }
 

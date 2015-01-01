@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 #from boards.forms import WriteForm
 from django.core.paginator import Paginator
+from ckeditor_form import CkEditorForm
 
 @login_required
 def write(request, board_id, **extra_fields):
@@ -91,8 +92,9 @@ def write(request, board_id, **extra_fields):
 #           rewrite mothod
 
     boardlist = Board.objects.all()
+    ck_editor_form = CkEditorForm()
 
-    return render(request, "boards/write.html", {'boardlist' : boardlist, 'board' : board})
+    return render(request, "boards/write.html", {'boardlist' : boardlist, 'board' : board, 'ckeditor_form' : ck_editor_form})
 
 @login_required
 def rewrite(request, board_id, post_id):
@@ -108,14 +110,18 @@ def rewrite(request, board_id, post_id):
             args=(board_id, post_id)))
 
     boardlist = Board.objects.all()
+    ck_editor_form = CkEditorForm({'content' : post.content})
 
     return render(request, "boards/write.html",
-            {'board' : board, 'post' : post, 'boardlist' : boardlist})
+            {'board' : board, 'post' : post, 'boardlist' : boardlist, 'ckeditor_form' : ck_editor_form})
 
 def postpage(request, board_id, post_id):
     board = Board.objects.get_board(board_id)
     post = Post.objects.get_post(post_id) 
     Post.objects.hit_count(post.id)
+    
+    if not post.board == board:
+        raise Http404
 
     if request.method == "POST":
         comment = request.POST['comment']
@@ -132,8 +138,9 @@ def postpage(request, board_id, post_id):
                 writer=request.user, board = board,
                 post = post, comment = comment
             )
+
     commentlist = \
-        Comment.objects.filter(post=post).order_by('-date_commented')
+        Comment.objects.filter(post=post).order_by('date_commented')
 
     boardlist = Board.objects.all()
     return render(request, "boards/postpage.html",

@@ -43,6 +43,16 @@
     .board-footer-list {
       margin: 10px 0;
     }
+    .notice-block {
+      background: white;
+      border: 1px solid #ccc;
+      display: inline;
+      padding: 5px 7px;
+      font-size: 12px;
+      color: #333;
+      border-radius: 3px;
+      margin-right: 10px;
+    }
     </style>
     <div class="container">
      <h3 class="page-header">{{ board.boardname }}
@@ -68,7 +78,7 @@
                 <tr>
                  <td class="number">
                    {% if notice.is_notice %}
-                     <div type="button" class="btn btn-default btn-xs">Notice</div>
+                     <div class="notice-block">Notice</div>
                    {% else%}
                       <div>{{ forloop.counter }}</div>
                    {% endif %}
