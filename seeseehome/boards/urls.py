@@ -13,7 +13,8 @@ urlpatterns = patterns('',
         'boards.views.deletecomment', name="deletecomment"),
     url(r'^boards/([0-9]+)/post/([0-9]+)/$', 'boards.views.postpage', 
         name="postpage"),
-    url(r'^boards/([0-9]+)/post/([0-9]+)/delete/$', 
-        'boards.views.deletepost', name="deletepost"),
+    url(r'^boards/([0-9]+)/post/([0-9]+)/delete/$', 'boards.views.deletepost', name="deletepost"),
+    url(r'^boards/([0-9]+)/file-upload$', 'boards.cgis.file_upload', name="file_upload"),
+    url(r'^boards/@([a-z0-9]*)$', 'boards.cgis.file_download', name="file_download"),
 
 ) 

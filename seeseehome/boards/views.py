@@ -76,6 +76,14 @@ def write(request, board_id, **extra_fields):
             if is_valid_content:
                 Post.objects.update_post(post.id, content=content)
 
+            if 'file_keys' in request.POST:
+                for file_key in request.POST.getlist('file_keys'):
+                    attachment_file = AttachmentFile.objects.file_by_hash_key(file_key)
+                    if not attachment_file == None:
+                        post.attachments.add(attachment_file)
+
+            post.save()
+
             return HttpResponseRedirect(reverse("boards:postpage",
                     args=(board_id, post.id)))
 #       If rewrite, no create, but update
@@ -85,7 +93,12 @@ def write(request, board_id, **extra_fields):
             if is_valid_content:
                 Post.objects.update_post(post_id, content=content,
                     is_notice = is_notice)
-            
+            if 'file_keys' in request.POST:
+                for file_key in request.POST['file_keys']:
+                    attachment_file = AttachmentFile.objects.file_by_hash_key(file_key)
+                    if not attachment_file == None:
+                        post.attachments.add(attachment_file)
+            post.save()
             messages.success(request, msg.boards_write_success)
             messages.info(request, msg.boards_write_success_info)
 #           no need to HttpResponseRedirect, That is inplementeed in 
@@ -144,8 +157,10 @@ def postpage(request, board_id, post_id):
 
     boardlist = Board.objects.all()
     return render(request, "boards/postpage.html",
-            {'board' : board, 'post' : post, 'boardlist' : boardlist,
-                'commentlist' : commentlist})
+            {
+                'board' : board, 'post' : post, 'boardlist' : boardlist,
+                'commentlist' : commentlist, 'attachments_count' : post.attachments.count(),
+            })
 
 def pagination(posts, posts_per_page = 10, page_num = 1):
 #   posts per page
@@ -316,4 +331,3 @@ def deletepost(request, board_id, post_id):
     
     return HttpResponseRedirect(reverse("boards:boardpage", 
       args=(board_id, 1)))
-

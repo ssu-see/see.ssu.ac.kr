@@ -29,3 +29,11 @@ def posts_last_3_days(board):
                              date_posted__range = (start_date, end_date)
                             )
     return posts_last_3_days.count()
+
+@register.filter
+def slice_without_ext(string, count):
+    splited = string.rsplit('.', 1)
+    file_name = splited[0]
+    ext = splited[1]
+
+    return file_name[:count] + '....' + ext

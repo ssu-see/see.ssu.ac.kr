@@ -67,6 +67,16 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+FILE_UPLOAD_HANDLERS = (
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+)
+
+SENDFILE_BACKEND = 'sendfile.backends.development'
+# 'sendfile.backends.simple'
+# 'sendfile.backends.xsendfile'
+# 'sendfile.backends.mod_wsgi'
+# 'sendfile.backends.nginx'
+
 ROOT_URLCONF = 'seeseehome.urls'
 
 WSGI_APPLICATION = 'seeseehome.wsgi.application'

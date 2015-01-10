@@ -1,4 +1,7 @@
 #-*- coding: utf-8 -*-
+import hashlib
+import os
+from seeseehome.settings import BASE_DIR
 from django.db import models
 from users.models import User
 #from posts.models import Post
@@ -102,6 +105,67 @@ class Board(models.Model):
        return 'Board name: ' + self.boardname
  
 
+class AttachmentFileManager(models.Manager):
+
+    def create_attachment(self, uploader, file_name, tmp_file_path):
+        return self._create_attachment(uploader, file_name, tmp_file_path)
+
+
+    def _create_attachment(self, uploader, file_name, tmp_file_path):
+        attachment = self.model(uploader=uploader, file_name=file_name)
+        attachment.md5_hash = self.hashfile(tmp_file_path)
+
+        dir_path = os.path.join(BASE_DIR, 'attach_file')
+        file_path = os.path.join(dir_path, attachment.md5_hash)
+
+        if not os.path.isdir(dir_path):
+            os.mkdir(dir_path)
+        if not os.path.isfile(file_path):
+            os.rename(tmp_file_path, file_path)
+
+        attachment.save()
+
+        return attachment;
+
+    def hashfile(self, file_path, hasher=None, blocksize=65536):
+        if hasher == None:
+            hasher = hashlib.md5()
+        with open(file_path) as afile:
+            buf = afile.read(blocksize)
+            while len(buf) > 0:
+                hasher.update(buf)
+                buf = afile.read(blocksize)
+
+        return hasher.hexdigest()
+
+    def file_by_hash_key(self, hash_key):
+        file_list = self.filter(md5_hash=hash_key)[:1]
+        if len(file_list) > 0:
+            return file_list[0]
+        else:
+            return None
+
+class AttachmentFile(models.Model):
+    objects = AttachmentFileManager()
+    uploader = models.ForeignKey(User)
+
+    file_name = models.CharField(
+                  help_text = "Attachment file's name",
+                  max_length = 255,
+                  default = '',
+              )
+
+    md5_hash = models.CharField(
+                  help_text = "Attachment file's name",
+                  max_length = 255,
+                  default = '',
+                  db_index=True,
+              )
+
+    timestamp = models.DateTimeField(auto_now_add=True, 
+                                    help_text = "Uploaded time")
+
+
 class PostManager(models.Manager):
     
     clear = ClearTag()
@@ -136,7 +200,6 @@ class PostManager(models.Manager):
             content = extra_fields['content']
             content = PostManager.clear.clear_tag(content) # escape content
             is_valid_content = self.validate_content(content)
-        print(extra_fields)
 
 #       post save ( caution : board is not parameter for post model )
         post = self.model(board=board, writer=writer, subject=subject)
@@ -164,10 +227,10 @@ class PostManager(models.Manager):
             raise ValidationError(msg.boards_post_subject_at_most_255)
     
     def validate_content(self, content):
-       if len(content) > 65535:
-            raise ValidationError(msg.boards_post_content_at_most_255)
-       else:
-            return True
+       # if len(content) > 65535:
+       #      raise ValidationError(msg.boards_post_content_at_most_65535)
+       # else:
+        return True
 
     def is_valid_writeperm(self, board, writer):
         return bool(str(board.writeperm).find(writer.userperm) >= 1)
@@ -217,7 +280,7 @@ class Post(models.Model):
 
     content = models.TextField(
                   help_text = "Post content",
-                  max_length = 65535,
+                  # max_length = 65535,
                   default = '',
               )
 
@@ -234,6 +297,7 @@ class Post(models.Model):
                     help_text = "counting of watched",
                     default = 0,
                 )
+    attachments = models.ManyToManyField(AttachmentFile)
 
 #   for showing post information instead of object itself
     def __unicode__(self):
@@ -322,4 +386,3 @@ class Comment(models.Model):
     def __unicode__(self):
        return ('Writer: ' + self.writer.username + ", " +\
                 "Comment: " + self.comment)
-

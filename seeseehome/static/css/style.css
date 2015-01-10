@@ -26,3 +26,6 @@ html, p, input {
 .fr {
   float: right;
 }
+.fl {
+	float: left;
+}

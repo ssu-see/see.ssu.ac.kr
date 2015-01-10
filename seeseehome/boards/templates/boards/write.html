@@ -57,7 +57,7 @@
     </div>
     <div class="extra-inputs">
       <div class="row extra-input">
-        <label for="inputEmail3" class="col-sm-2 control-label">첨부파일</label>
+        <label class="col-sm-2 control-label">첨부파일</label>
         <div class="col-sm-10">
           <div id="attchment-file-error"></div>
           <ul id="attachment-list" class="empty">
@@ -66,9 +66,9 @@
         </div>
       </div>
       <div class="row extra-input">
-        <label for="inputEmail3" class="col-sm-2 control-label">태그</label>
+        <label for="tags" class="col-sm-2 control-label">태그</label>
         <div class="col-sm-10">
-          <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+          <input type="text" class="form-control" id="tags" placeholder="Tags">
         </div>
       </div>
     </div>
@@ -120,11 +120,9 @@
   };
   CKEDITOR.editor.attachBeforeUpload = function(up, file) {
     $('#' + file.id + ' .remove-icon').remove();
-    up.settings.url = "http://posttestserver.com/post.php";
+    up.settings.url = "{% url 'boards:file_upload' board.id %}";
   }
   CKEDITOR.editor.attachError = function(up, err) {
-
-    // document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
     error_context = $('<div class="alert alert-danger fade in" role="alert"> \
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"> \
           <span aria-hidden="true">&times;</span> \
@@ -140,12 +138,9 @@
     }, 5000);
   }
   CKEDITOR.editor.attachFileUploaded = function(up, file, ret) {
-    console.log(up);
-    console.log(file);
-    console.log(ret);
     if(ret.status == 200) {
-      $('#post-form').append('<input type="hide" name="files_key[]" value="sadjldksjflkds">');
-      ret.response
+      parsed_ret = JSON.parse(ret.response);
+      $('#post-form').append('<input type="hidden" name="file_keys" value="' + parsed_ret.hash_key + '">');
     }
   }
   CKEDITOR.editor.attachUploaded = function() {
@@ -155,6 +150,7 @@
 
   $('#post-form').submit(function(e) {
     if(file_uploaded || CKEDITOR.editor.uploader.files.length == 0) {
+      $("#post-submit-button").button('reset');
       return true;
     }
     else {
@@ -162,7 +158,6 @@
       $("#post-submit-button").button('loading')
       $('#post-cancel-button').remove();
       CKEDITOR.editor.uploader.start();
-      // $btn.button('reset');
     }
   });
 

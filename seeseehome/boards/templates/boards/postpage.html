@@ -1,4 +1,5 @@
 {% extends "template.html" %}
+{% load boards_custom_tags %}
 {% block content %}
   {% include 'template_menu.html' %}
   <style>
@@ -70,7 +71,47 @@
   .comment-box .comment-submit {
     height: 70px !important;
   }
-  
+  #attach-file {
+    position: relative;
+  }
+  #attach-file .title {
+    cursor: pointer;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  #attach-file .title:hover {
+    text-decoration: underline;
+  }
+  #attach-file .count {
+    font-weight: bold;
+  }
+  #attach-file #attach-file-list {
+    display: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    padding: 10px;
+    border: 1px solid #333;
+    position: absolute;
+    right: 0;
+    z-index: 999;
+    background-color: white;
+    width: 300px;
+  }
+  .attach-file-title {
+    display: block;
+  }
+  .attach-file-link {
+    display: block;
+  }
+  .attach-file-title .glyphicon-floppy-disk {
+    width: 11px;
+    font-size: 11px;
+    margin-right: 2px;
+  }
   </style>
   <div class="container post">
     <h3 class="title-block clearfix">
@@ -88,8 +129,23 @@
         {% endif %}
       </div>
     </h3>
-    <div class="post-state">
-      {{ post.writer.username }}<span class="splitter"></span>{{ post.date_posted | date:"Y.m.d h:m A" }}<span class="splitter"></span>조회 : {{ post.hit_count }}
+    <div class="clearfix">
+      <div class="post-state fl">
+        {{ post.writer.username }}<span class="splitter"></span>{{ post.date_posted | date:"Y.m.d h:m A" }}<span class="splitter"></span>조회 : {{ post.hit_count }}
+      </div>
+      {% if not attachments_count == 0 %}
+      <div id="attach-file" class="fr">
+        <span class="title">첨부 파일 <span class="count">{{ attachments_count }}</span></span>
+        <ul id="attach-file-list">
+          {% for attachment in post.attachments.all %}
+          <li class="clearfix">
+            <span class="attach-file-title fl"><span class="glyphicon glyphicon-floppy-disk"></span>{{ attachment.file_name | slice_without_ext:10 }}</span>
+            <a href="{% url 'boards:file_download' attachment.md5_hash %}" class="attach-file-link fr">다운로드</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
     </div>
     <div class="content">
       {% if post.content %}
@@ -127,5 +183,21 @@
       </form>
     </div>
   </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+  $('#attach-file .title').click(function(e) {
+    if($('#attach-file-list').css('display') == 'none')
+      $('#attach-file-list').css('display', 'block');
+    else
+      $('#attach-file-list').css('display', 'none');
+
+    e.stopPropagation();
+  });
+  $('body').click(function() {
+    $('#attach-file-list').css('display', 'none');
+  })
+</script>
 {% endblock %}
 
