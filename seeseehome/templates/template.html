@@ -22,8 +22,10 @@
     {% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
-    {% block content %}
-    {% endblock %}
+    <div id="reponsive-safe-box">
+        {% block content %}
+        {% endblock %}
+    </div>
     {% include 'message.html' %}
     <!-- starts footer -->
     <footer id="footer">

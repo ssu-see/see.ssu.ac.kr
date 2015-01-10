@@ -29,3 +29,10 @@ html, p, input {
 .fl {
 	float: left;
 }
+
+@media (max-width: 990px) {
+  #reponsive-safe-box {
+    margin-top: 120px;
+  }
+}
+
