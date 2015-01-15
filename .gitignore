@@ -24,6 +24,9 @@ bin/
 db.sqlite3
 .DS_store
 
+# fixture data
+fixtures/
+
 # Security information file
 security_information.py
 seeseehome/media/
