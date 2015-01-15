@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 import hashlib
 import os
+import shutil
 from seeseehome.settings import BASE_DIR
 from django.db import models
 from users.models import User
@@ -121,7 +122,7 @@ class AttachmentFileManager(models.Manager):
         if not os.path.isdir(dir_path):
             os.mkdir(dir_path)
         if not os.path.isfile(file_path):
-            os.rename(tmp_file_path, file_path)
+            shutil.move(tmp_file_path, file_path)
 
         attachment.save()
 
@@ -260,6 +261,8 @@ class PostManager(models.Manager):
             post.content = PostManager.clear.clear_tag(extra_fields['content'])
         if 'is_notice' in extra_fields:
             post.is_notice = extra_fields['is_notice']
+        if 'attachment_file' in extra_fields:
+            post.attachments.add(extra_fields['attachment_file'])
 
         post.save()
 

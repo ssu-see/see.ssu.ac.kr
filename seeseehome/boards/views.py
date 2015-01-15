@@ -80,9 +80,7 @@ def write(request, board_id, **extra_fields):
                 for file_key in request.POST.getlist('file_keys'):
                     attachment_file = AttachmentFile.objects.file_by_hash_key(file_key)
                     if not attachment_file == None:
-                        post.attachments.add(attachment_file)
-
-            post.save()
+                        Post.objects.update_post(post.id, attachment_file=attachment_file)
 
             return HttpResponseRedirect(reverse("boards:postpage",
                     args=(board_id, post.id)))
@@ -90,15 +88,17 @@ def write(request, board_id, **extra_fields):
         else:
             post_id = extra_fields['post_id']
             Post.objects.update_post(post_id, subject=subject)
+
             if is_valid_content:
                 Post.objects.update_post(post_id, content=content,
                     is_notice = is_notice)
+
             if 'file_keys' in request.POST:
                 for file_key in request.POST['file_keys']:
                     attachment_file = AttachmentFile.objects.file_by_hash_key(file_key)
                     if not attachment_file == None:
-                        post.attachments.add(attachment_file)
-            post.save()
+                        Post.objects.update_post(post_id, attachment_file=attachment_file)
+
             messages.success(request, msg.boards_write_success)
             messages.info(request, msg.boards_write_success_info)
 #           no need to HttpResponseRedirect, That is inplementeed in 
