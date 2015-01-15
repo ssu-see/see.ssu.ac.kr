@@ -9,7 +9,8 @@
     <link href="{% static 'css/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/compiled/bootstrap-overrides.css' %}">
     <link rel="stylesheet" href="{% static 'css/compiled/theme.css' %}" />
-
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css' />
 
     <link rel="stylesheet" href="{% static 'css/compiled/index.css' %}" type="text/css" media="screen" />    
@@ -31,6 +32,7 @@
     <footer id="footer">
         <div class="container">
             <div class="row sections">
+                {% comment %}
                 <div class="col-sm-4 recent_posts">
                     <h3 class="footer_header">
                         Recent Posts
@@ -88,8 +90,15 @@
                         <input type="submit" value="Send" />
                     </form>
                 </div>
+                {% endcomment %}
             </div>
             <div class="row credits">
+                <div class="row copyright">
+                    <div class="col-md-12">
+                        &copy; 2015 <a href="http://github.com/ssu-see">SEE</a>. All rights reserved.
+                    </div>
+                </div>
+                {% comment %}
                 <div class="col-md-12">
                     <div class="row social">
                         <div class="col-md-12">
@@ -123,12 +132,8 @@
                             </a>
                         </div>
                     </div>
-                    <div class="row copyright">
-                        <div class="col-md-12">
-                            &copy; 2014 Luavis. All rights reserved.
-                        </div>
-                    </div>
                 </div>            
+                {% endcomment %}
             </div>
         </div>
     </footer>
@@ -137,7 +142,8 @@
     <script src="{% static 'js/jquery-latest.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/theme.js' %}"></script>
-    <script src="{% static 'js/index-slider.js' %}"></script>	
+    <script src="{% static 'js/jquery.gritter.min.js' %}"></script>
+    <script>setTimeout(function() {$('.gritter-item-wrapper').fadeOut('slow');}, 2000);</script>
     {% block javascript %}
     {% endblock %}
 </body>
