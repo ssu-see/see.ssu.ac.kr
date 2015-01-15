@@ -1,0 +1,6 @@
+#! /bin/bash
+
+
+kill -INT `cat /tmp/see.pid`
+# or for convenience...
+uwsgi --stop /tmp/see.pid
