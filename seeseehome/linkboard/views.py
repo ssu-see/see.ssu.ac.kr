@@ -82,6 +82,12 @@ def linkpost(request, **extra_fields):
 @login_required
 def linkboardpage(request, page=1):
     posts = LinkPost.objects.all().order_by('-date_posted')
+    posts_per_page = 10
+    
+    try:
+        page = int(page)
+    except:
+        raise Http404
 
     if request.method == "POST":
         search_decription = request.POST['search_description']
@@ -102,24 +108,43 @@ def linkboardpage(request, page=1):
         custom_paginator = views.pagination(
                                posts=posts, 
                                posts_per_page = 10,
-                               page=page
+                               page_num=page
                            )
-    except:
+    except Exception as e:
+        print(e)
         raise Http404
 
     boardlist = Board.objects.all()
+    """
+        return render(request, "linkboard/linkboardpage.html",
+                   {
+                       'posts' : custom_paginator['posts'],
+                       'paginator' :custom_paginator['paginator'],
+                       'has_next' : custom_paginator['has_next'],
+                       'has_previous' : custom_paginator['has_previous'],
+                       'next_page_num' : custom_paginator['next_page_num'],
+                       'previous_page_num' : custom_paginator['previous_page_num'],
+                       'boardlist' : boardlist,
+                   }
+               )
+    """
+    return render(request, "linkboard/linkboardpage.html", 
+      {
+        'post_base_index': (posts_per_page * (page - 1)),
+        'posts' : custom_paginator['posts'],
+        'paginator' :custom_paginator['paginator'],
+        'has_next' : custom_paginator['has_next'],
+        'has_next_10' : custom_paginator['has_next_10'],
+        'current_page_num' : page,
+        'has_previous' : custom_paginator['has_previous'],
+        'has_previous_10' : custom_paginator['has_previous_10'],
+        'page_range' : custom_paginator['page_range'],
+        'next_page_num' : custom_paginator['next_page_num'],
+        'previous_page_num' : custom_paginator['previous_page_num'],
+        'next_10_page_num' : custom_paginator['next_10_page_num'],
+        'previous_10_page_num' : custom_paginator['previous_10_page_num'],
+      })
 
-    return render(request, "linkboard/linkboardpage.html",
-               {
-                   'posts' : custom_paginator['posts'],
-                   'paginator' :custom_paginator['paginator'],
-                   'has_next' : custom_paginator['has_next'],
-                   'has_previous' : custom_paginator['has_previous'],
-                   'nextpage' : custom_paginator['nextpage'],
-                   'previous_page' : custom_paginator['previous_page'],
-                   'boardlist' : boardlist,
-               }
-           )
 @login_required
 def updatelinkpost(request, post_id):
     post = LinkPost.objects.get_linkpost(post_id)

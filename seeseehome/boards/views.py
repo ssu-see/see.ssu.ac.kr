@@ -281,7 +281,6 @@ def boardpage(request, board_id, page=1):
     try:    
         custom_paginator = pagination(posts=posts, posts_per_page = posts_per_page, page_num=page)
     except Exception as e:
-        print(e)
         raise Http404
 
 #   for board list of menu bar
