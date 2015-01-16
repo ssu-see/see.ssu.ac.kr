@@ -32,7 +32,7 @@ SECRET_KEY = 't6g+nq2ba%na%(fxbm%ino##c@4+pn&+68j5spm+!nu2e)*6^b'
 # If you still need to server static locally (e.g. for testing without debug) you can run devserver in insecure mode:
 # python manage.py runserver 0.0.0.0:80 --insecure
 DEBUG = True
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = True
 
 #ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '220.149.86.220', 'see.ssu.ac.kr', '0.0.0.0']

@@ -20,18 +20,15 @@
                     <ul class="dropdown-menu">
                         {% if boardlist %}
                           {% for board in boardlist %}
-                          <!-- board page of <a> tag is linked to the first page of the target board -->
-                            {% if board|posts_last_2_weeks %}
-                              {% if board|posts_last_3_days %}
-                                <li><a href="{% url 'boards:boardpage' board.id 1 %}">{{ board.boardname }}&nbsp;&nbsp;<span class="gray">{{ board | posts_last_3_days }}&nbsp;</span><span class="dark-gray"><strong>N</strong></span></a>
-                              {% else %}
-                              <li><a href="{% url 'boards:boardpage' board.id 1 %}">{{ board.boardname }}&nbsp;&nbsp;<span class="gray">{{ board | posts_last_2_weeks }}</span></a>
-                              {% endif %}
-                              </li>
-                            {% else %}
-                              <li><a href="{% url 'boards:boardpage' board.id 1 %}">{{ board.boardname }}</a>
-                              </li>
-                            {% endif %}
+                            <li>
+                              <a href="{% url 'boards:boardpage' board.id 1 %}" class="clearfix">
+                                <span class="fl">{{ board.boardname }}</span>
+                                {# {{ board | posts_last_3_days }}&nbsp;</span> #}
+                                {% if board|posts_last_3_days %}
+                                  <strong class="board-new fr">New</strong>
+                                {% endif %}
+                              </a>
+                            </li>
                           {% endfor %}  
                         {% else %}
                           &nbsp;No board yet

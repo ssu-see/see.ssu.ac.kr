@@ -154,7 +154,7 @@ def signup(request):
 
         messages.success(request, msg.users_signup_success)
         messages.info(request, msg.users_signup_success_info)
-        return HttpResponseRedirect(reverse("users:singin"))
+        return HttpResponseRedirect(reverse("users:signin"))
 
     boardlist = Board.objects.all()
     return render(request, "users/signup.html", {'boardlist' : boardlist})

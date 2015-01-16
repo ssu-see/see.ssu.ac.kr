@@ -83,7 +83,8 @@ def linkpost(request, **extra_fields):
 def linkboardpage(request, page=1):
     posts = LinkPost.objects.all().order_by('-date_posted')
     posts_per_page = 10
-    
+    boardlist = Board.objects.all()
+     
     try:
         page = int(page)
     except:
@@ -93,7 +94,6 @@ def linkboardpage(request, page=1):
         search_decription = request.POST['search_description']
         posts = posts.filter(description__icontains = search_decription)
         posts = posts[0:50]
-        boardlist = Board.objects.all()
         return render(request, "linkboard/linkboardpage.html",
                    {
                        'posts' : posts,
@@ -114,7 +114,6 @@ def linkboardpage(request, page=1):
         print(e)
         raise Http404
 
-    boardlist = Board.objects.all()
     """
         return render(request, "linkboard/linkboardpage.html",
                    {
@@ -143,6 +142,7 @@ def linkboardpage(request, page=1):
         'previous_page_num' : custom_paginator['previous_page_num'],
         'next_10_page_num' : custom_paginator['next_10_page_num'],
         'previous_10_page_num' : custom_paginator['previous_10_page_num'],
+        'boardlist' : boardlist,
       })
 
 @login_required
@@ -161,7 +161,7 @@ def updatelinkpost(request, post_id):
 @login_required
 def deletelinkpost(request, post_id):
     linkpost = LinkPost.objects.get_linkpost(post_id)
-    print linkpost.writer
+#    print linkpost.writer
     if request.user != linkpost.writer:
         messages.error(request, msg.boards_delete_post_error)
         messages.info(request, msg.boards_delete_post_auth_error)

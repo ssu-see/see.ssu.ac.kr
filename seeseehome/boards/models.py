@@ -37,7 +37,7 @@ class BoardManager(models.Manager):
         return True
 
     def is_valid_readperm(self, board, reader):
-        return bool(str(board.readperm).find(reader.userperm) >= 1)
+        return bool(str(board.readperm).find(reader.userperm) >= 0)
 
 
 ##########
@@ -85,8 +85,8 @@ class Board(models.Model):
                         ('3', 'Core member'), ('4', 'Graduate'), 
                         ('5', 'President')),
                     default = ['0', '1','2','3','4','5'],
-                    max_length = 9,
-                    max_choices=5,
+                    max_length = 11,
+                    max_choices = 6,
                )
                    
     writeperm = MultiSelectField(
@@ -98,7 +98,7 @@ class Board(models.Model):
                         ('5', 'President')),
                     default = ['0', '1', '2', '3', '4', '5'],
                     max_length = 9,
-                    max_choices=5,
+                    max_choices = 5,
                )
 
 #   for showing user name instead of object itself in admin page
