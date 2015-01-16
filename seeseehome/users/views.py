@@ -60,8 +60,9 @@ def signin(request):
         next = ''
         if 'next' in request.GET:
             next = request.GET['next']
-            
-        return render(request, "users/signin.html", {'next' : next})
+        boardlist = Board.objects.all()
+        return render(request, "users/signin.html", {'next' : next, 
+                'boardlist' : boardlist})
 
 def logout(request):
     if request.user.__class__.__name__ is 'AnonymousUser':

@@ -1,6 +1,6 @@
 import os
 from libs.http import HttpJsonResponse
-from sendfile import sendfile
+#from sendfile import sendfile
 from seeseehome.settings import BASE_DIR
 from boards.models import AttachmentFile 
 from django.views.decorators.csrf import csrf_exempt
