@@ -37,7 +37,7 @@ class BoardManager(models.Manager):
         return True
 
     def is_valid_readperm(self, board, reader):
-        return bool(str(board.readperm).find(reader.userperm) >= 0)
+        return bool(str(board.readperm).find(reader.userperm) >= 1)
 
 
 ##########
