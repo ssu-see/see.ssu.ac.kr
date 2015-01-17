@@ -1,6 +1,3 @@
-# Migrations files
-migrations/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -22,13 +19,24 @@ bin/
 
 # Database
 db.sqlite3
-.DS_store
 
 # fixture data
 fixtures/
 
 # Security information file
 security_information.py
+
+
+# attachement files
 seeseehome/media/
 seeseehome/attach_file/
 
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.log
