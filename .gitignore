@@ -40,3 +40,5 @@ seeseehome/attach_file/
 ehthumbs.db
 Thumbs.db
 *.log
+
+.ropeproject
