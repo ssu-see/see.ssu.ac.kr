@@ -61,6 +61,10 @@ def signin(request):
         if 'next' in request.GET:
             next = request.GET['next']
 
+        boardlist = Board.objects.all()
+        return render(request, "users/signin.html", {'next' : next,
+                'boardlist' : boardlist})
+
         return render(request, "users/signin.html", {'next': next})
 
 def logout(request):
@@ -280,7 +284,7 @@ def editpassword(request):
         _logout(request)
         messages.success(request, msg.users_change_pwd_success)
         messages.info(request, msg.users_change_pwd_success_info)
-        return HttpResponseRedirect(reverse("users:singin"))
+        return HttpResponseRedirect(reverse("users:signin"))
 
     boardlist = Board.objects.all()
     return render(request, "users/editpwd.html", {'boardlist' : boardlist})

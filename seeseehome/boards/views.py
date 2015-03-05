@@ -10,6 +10,21 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from ckeditor_form import CkEditorForm
 
+def check_invalid_readperm_with_message(request, board, reader):
+#   Does the writer has valid write permission?
+    if reader is None:
+        if '0' not in board.readperm:
+            messages.error(request, msg.boards_read_error)
+            messages.info(request, msg.boards_read_error_info)
+            return False
+    elif not Board.objects.is_valid_readperm(
+           board = board, reader = reader):
+        messages.error(request, msg.boards_read_error)
+        messages.info(request, msg.boards_read_error_info)
+        return False 
+    
+    return True
+
 @login_required
 def write(request, board_id, **extra_fields):
 #   django-ckform not used. 
@@ -131,11 +146,20 @@ def rewrite(request, board_id, post_id):
 def postpage(request, board_id, post_id):
     board = Board.objects.get_board(board_id)
     post = Post.objects.get_post(post_id) 
-    Post.objects.hit_count(post.id)
     
     if not post.board == board:
         raise Http404
 
+#   reader : for is_valid_readperm
+    reader = User.objects.get_user(request.user.id)
+    if check_invalid_readperm_with_message(request, board, reader) is False:
+        return HttpResponseRedirect(reverse("home"))
+
+    if reader is None:
+        Post.objects.hit_count(post.id)
+    elif post.writer.id is not reader.id:
+        Post.objects.hit_count(post.id)
+ 
     if request.method == "POST":
         comment = request.POST['comment']
         try:
@@ -209,8 +233,6 @@ def pagination(posts, posts_per_page = 10, page_num = 1):
                        }
     return custom_paginator
 
-
-@login_required
 def boardpage(request, board_id, page=1):
 #   board : for is_valid_readperm
     board = Board.objects.get_board(board_id)
@@ -223,13 +245,10 @@ def boardpage(request, board_id, page=1):
         page = int(page)
     except:
         raise Http404
-    
-#   Does the writer has valid write permission?
-    if not Board.objects.is_valid_readperm(
-           board = board, reader = reader):
-        messages.error(request, msg.boards_read_error)
-        messages.info(request, msg.boards_read_error_info)
-        return HttpResponseRedirect(reverse("home")) 
+
+#   Does the reader has valid write permission?
+    if check_invalid_readperm_with_message(request, board, reader) is False:
+        return HttpResponseRedirect(reverse("home"))
 
 #   The following line is important to the page list (prev page, next page)
     posts = Post.objects.filter(board=board).order_by("-date_posted")
