@@ -62,7 +62,7 @@ def signin(request):
             next = request.GET['next']
 
         boardlist = Board.objects.all()
-        return render(request, "users/signin.html", {'next' : next, 
+        return render(request, "users/signin.html", {'next' : next,
                 'boardlist' : boardlist})
 
         return render(request, "users/signin.html", {'next': next})
