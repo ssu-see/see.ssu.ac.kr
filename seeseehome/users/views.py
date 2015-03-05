@@ -20,8 +20,8 @@ def authenticate(username=None, password=None):
         try:
             user = User.objects.get(email=username)
         except User.DoesNotExist:
-            return None        
-    
+            return None
+
     if user.check_password(password):
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         return user
@@ -43,11 +43,11 @@ def signin(request):
                 _login(request, user)
                 messages.success(request, msg.users_login_success)
                 messages.info(request, msg.users_login_success_info)
-    
+
                 next = ""
                 if 'next' in request.GET:
                     next = request.GET['next']
-                
+
                 if next == "" or next == "/":
                     return HttpResponseRedirect(reverse("home"))
                 else:
@@ -55,14 +55,17 @@ def signin(request):
         else:
             messages.error(request, msg.users_login_error)
             messages.info(request, msg.users_invalid)
-            return HttpResponseRedirect(reverse("users:singin"))
+            return HttpResponseRedirect(reverse("users:signin"))
     else:
         next = ''
         if 'next' in request.GET:
             next = request.GET['next']
+
         boardlist = Board.objects.all()
         return render(request, "users/signin.html", {'next' : next, 
                 'boardlist' : boardlist})
+
+        return render(request, "users/signin.html", {'next': next})
 
 def logout(request):
     if request.user.__class__.__name__ is 'AnonymousUser':
@@ -87,7 +90,7 @@ def signup(request):
           messages.error(request, msg.users_signup_error)
           messages.info(request, msg.users_invalid_name)
           return HttpResponseRedirect(reverse("users:signup"))
-        
+
 #       username unique check
         try:
             User.objects.get(username = username)
@@ -97,7 +100,7 @@ def signup(request):
             messages.error(request, msg.users_signup_error)
             messages.info(request, msg.users_exist_name)
             return HttpResponseRedirect(reverse("users:signup"))
-            
+
 #       email
         email = request.POST['email']
         try:
@@ -106,7 +109,7 @@ def signup(request):
             messages.error(request, msg.users_signup_error)
             messages.info(request, msg.users_invalid_email)
             return HttpResponseRedirect(reverse("users:signup"))
-        
+
 #       email unique check
         try:
             User.objects.get(email = email)
@@ -116,11 +119,11 @@ def signup(request):
             messages.error(request, msg.users_signup_error)
             messages.info(request, msg.users_exist_email)
             return HttpResponseRedirect(reverse("users:signup"))
-        
+
 #       password
         password = request.POST['pwd']
         password_confirmation = request.POST['confirm_pwd']
-        
+
         if password != password_confirmation:
             messages.error(request, msg.users_signup_error)
             messages.info(request, msg.users_confirm_pwd_error)
@@ -132,7 +135,7 @@ def signup(request):
                 messages.error(request, msg.users_signup_error)
                 messages.info(request, msg.users_invalid_pwd)
                 return HttpResponseRedirect(reverse("users:signup"))
-        
+
 #       contact number
         if ('contact_number' in request.POST) and \
             (str(request.POST['contact_number']) != ""):
@@ -149,7 +152,7 @@ def signup(request):
 #       User Registration
         user = User.objects.create_user(username = username, email = email,
                                 password = password)
-        
+
         if is_contact_number:
             User.objects.update_user(user.id, contact_number = contact_number)
 
@@ -163,7 +166,7 @@ def signup(request):
 @login_required
 def personalinfo(request):
     boardlist = Board.objects.all()
-    return render(request, "users/personalinfo.html", 
+    return render(request, "users/personalinfo.html",
             {'boardlist' : boardlist})
 
 @login_required
@@ -172,7 +175,7 @@ def editpersonalinfo(request):
     if request.method == 'POST':
         username = request.POST['username']
 
-#       Is there difference in user name?        
+#       Is there difference in user name?
         if (request.user.username != username) and \
           (str(username) != ""):
 #          username validator
@@ -192,12 +195,12 @@ def editpersonalinfo(request):
                 messages.error(request, msg.users_editpersonalinfo_error)
                 messages.info(request, msg.users_exist_name)
                 return HttpResponseRedirect(reverse("users:editpersonalinfo"))
-        
+
             User.objects.update_user(
-                request.user.id, 
+                request.user.id,
                 username = username
             )
-           
+
 #       email
         email = request.POST['email']
 #       Is there difference in email?
@@ -218,9 +221,9 @@ def editpersonalinfo(request):
                 messages.error(request, msg.users_editpersonalinfo_error)
                 messages.info(request, msg.users_exist_email)
                 return HttpResponseRedirect(reverse("users:editpersonalinfo"))
- 
+
             User.objects.update_user(
-                request.user.id, 
+                request.user.id,
                 email = email,
             )
 
@@ -237,14 +240,14 @@ def editpersonalinfo(request):
                 return HttpResponseRedirect(reverse("users:editpersonalinfo"))
             else:
                 User.objects.update_user(
-                    request.user.id, 
+                    request.user.id,
                     contact_number = contact_number,
                 )
         messages.success(request, msg.users_editpersonalinfo_success)
         return HttpResponseRedirect(reverse("users:personalinfo"))
 
     boardlist = Board.objects.all()
-    return render(request, "users/editpersonalinfo.html", 
+    return render(request, "users/editpersonalinfo.html",
             {'boardlist' : boardlist})
 
 @login_required
@@ -261,13 +264,13 @@ def editpassword(request):
 #       check if new password is equal to new password confirmation
         new_password = request.POST['confirm_new_pwd']
         new_password_confirmation = request.POST['confirm_new_pwd']
-        
+
         if new_password != new_password_confirmation:
             messages.error(request, msg.users_change_pwd_error)
             messages.info(request, msg.users_confirm_pwd_error)
             return HttpResponseRedirect(reverse("users:editpwd"))
         else:
-#       check if new password is valid            
+#       check if new password is valid
             try:
                 User.objects.validate_password(new_password)
             except ValidationError:
@@ -275,13 +278,13 @@ def editpassword(request):
                 messages.info(request, msg.users_invalid_pwd)
                 return HttpResponseRedirect(reverse("users:editpwd"))
 
-#       set new password            
+#       set new password
         request.user.set_password(new_password)
         request.user.save()
         _logout(request)
         messages.success(request, msg.users_change_pwd_success)
         messages.info(request, msg.users_change_pwd_success_info)
-        return HttpResponseRedirect(reverse("users:singin"))
+        return HttpResponseRedirect(reverse("users:signin"))
 
     boardlist = Board.objects.all()
     return render(request, "users/editpwd.html", {'boardlist' : boardlist})
