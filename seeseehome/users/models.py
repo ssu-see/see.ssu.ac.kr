@@ -14,17 +14,17 @@ from seeseehome import msg
 
 class UserManager(BaseUserManager):
 ##### CREATE
-    def _create_user(self, username, email, password, 
+    def _create_user(self, username, email, password,
         is_admin=False, **extra_fields):
-        """ 
-        It Creates and saves a User with the given username, email and 
+        """
+        It Creates and saves a User with the given username, email and
         password, and values in extra fields.
         """
         self.validate_username(username)
         email = self.normalize_email(email)
         validate_email(email)
         self.validate_password(password)
-        
+
         user = self.model(username=username, email=email, is_admin=is_admin)
 
         if 'contact_number' in extra_fields:
@@ -37,22 +37,22 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, username, email, password, **extra_fields):
-        return self._create_user(username, email, password, 
+        return self._create_user(username, email, password,
                                  **extra_fields)
-    
+
     def create_superuser(self, username, email, password, **extra_fields):
-        user = self._create_user(username, email, password, 
+        user = self._create_user(username, email, password,
                 is_admin=True, **extra_fields)
         return user
-    
+
     def validate_username(self, username):
         if not username:
             raise ValueError(msg.users_name_must_be_set)
         elif len(username) > 30:
             raise ValidationError(msg.users_name_at_most_30)
         if bool(re.match('^[가-힣a-zA-Z0-9_-]+$', str(username))) is False:
-            raise ValidationError(msg.users_invalid_name)    
- 
+            raise ValidationError(msg.users_invalid_name)
+
     def validate_password(self, password):
         if len(password) < 6:
             raise ValidationError(
@@ -62,17 +62,17 @@ class UserManager(BaseUserManager):
             raise ValidationError(
                 msg.users_pwd_at_most_255,
             )
-        
+
         if bool(re.search('[0-9]', password)) is False:
             raise ValidationError(msg.users_pwd_no_numeric_char)
-        
+
         if bool(re.search('[a-zA-Z]', password)) is False:
             raise ValidationError(msg.users_pwd_no_alphabet_char)
 
         """
 #       regex for special characters may be added later
         if bool(re.search(
-                   '[~`$&+,:;=?@#|\'\"<>.^*()%!-[]{},./?]', 
+                   '[~`$&+,:;=?@#|\'\"<>.^*()%!-[]{},./?]',
                    password)) is False:
             raise ValidationError(msg.users_pwd_no_special_char)
         """
@@ -146,11 +146,11 @@ class UserManager(BaseUserManager):
                 raise ValidationError(
                         msg.users_update_is_admin_must_be_bool_type)
 
-        
+
         user.save(using = self._db)
 
 ##########
-##### DELETE        
+##### DELETE
     def delete_user(self, id):
         user = self.get(id=id)
         user.delete()
@@ -158,12 +158,12 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     objects = UserManager()
 
-#   For custom user model, username field must be set   
+#   For custom user model, username field must be set
     USERNAME_FIELD = 'username'
 
 #   When create superuser using cli, required field data is used.
     REQUIRED_FIELDS = ['email']
-    
+
     username = models.CharField(
                help_text = "User name",
                max_length = 30,
@@ -173,7 +173,7 @@ class User(AbstractBaseUser):
                 help_text = "User email",
                 max_length = 64,
                 unique = True,
-            ) 
+            )
 
     contact_number = models.CharField(
                       help_text = "User Contact Number",
@@ -186,7 +186,7 @@ class User(AbstractBaseUser):
                 )
 
     """
-    If you want your custom User model to also work with Admin, 
+    If you want your custom User model to also work with Admin,
     your User model must define some additional attributes and methods.
     """
     is_admin = models.BooleanField(
@@ -196,17 +196,23 @@ class User(AbstractBaseUser):
 
     """
     Read/Write permission of Board model is described to multiple select field.
-    That is constructed by Char field. 
+    That is constructed by Char field.
     """
     userperm = models.CharField(
                    help_text = 'Available User Permission [ User, Member, '
                     'Core member, Graduate, President ]',
-                   choices = (('1', 'User',), ('2', 'Member'), 
-                       ('3', 'Core member'), ('4', 'Graduate'), 
+                   choices = (('1', 'User',), ('2', 'Member'),
+                       ('3', 'Core member'), ('4', 'Graduate'),
                        ('5', 'President')),
                    default='1',
                    max_length = 1,
                )
+
+    signup_date = models.DateTimeField(
+        blank=True,
+        null=True,
+        auto_now_add=True
+    )
 
     def deactivate(self):
         self.is_active = False
@@ -228,11 +234,11 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.username
-        
+
     def is_superuser(self):
         return is_admin
     """
-    The following two method 'has_perm', 'has_module_perms' is important to 
+    The following two method 'has_perm', 'has_module_perms' is important to
     access built-in admin site.
     """
     def has_perm(self, perm, obj=None):
