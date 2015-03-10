@@ -158,7 +158,7 @@
         {% if commentlist %}
           {% for comment in commentlist %}
           <li class="comment">
-            <div class="cleafix">
+            <div class="clearfix">
               <span class="title fl">
                 {{ comment.writer.username }}<span class="splitter"></span><span class="comment-date">{{ comment.date_commented | date:"Y.m.d h:m A" }}</span>
               </span>
