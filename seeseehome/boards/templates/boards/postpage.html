@@ -162,7 +162,7 @@
               <span class="title fl">
                 {{ comment.writer.username }}<span class="splitter"></span><span class="comment-date">{{ comment.date_commented | date:"Y.m.d h:m A" }}</span>
               </span>
-              {% if post.writer == user %}
+              {% if comment.writer == user or user.is_superuser %}
                 <a href="{% url 'boards:deletecomment' board.id post.id comment.id  %}" class="btn btn-danger btn-xs fr">Delete</a>
               {% endif %}
             </div>
