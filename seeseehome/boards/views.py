@@ -147,10 +147,14 @@ def postpage(request, board_id, post_id):
             messages.error(request, msg.board_comment_error)
             messages.info(request, msg.board_comment_at_most_255)
         else:
-            Comment.objects.create_comment(
-                writer=request.user, board = board,
-                post = post, comment = comment
-            )
+            try:
+                Comment.objects.create_comment(
+                    writer=request.user, board = board,
+                    post = post, comment = comment
+                )
+            except ValidationError:
+                messages.error(request, msg.boards_writer_perm_error))
+    
 
     commentlist = \
         Comment.objects.filter(post=post).order_by('date_commented')
