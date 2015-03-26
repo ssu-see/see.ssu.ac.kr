@@ -7,16 +7,18 @@ from django.db import models
 from users.models import User
 #from posts.models import Post
 from seeseehome import msg
-from django.core.exceptions import ObjectDoesNotExist,ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from multiselectfield import MultiSelectField
 from cleartag import ClearTag
 
+
 class BoardManager(models.Manager):
-##### CREATE
+    # CREATE
+
     def _create_board(self, boardname):
         self.validate_boardname(boardname)
         self.validate_max_number_of_boards(Board.objects.all().count())
-        board = self.model(boardname = boardname)
+        board = self.model(boardname=boardname)
         board.save(using=self._db)
         return board
 
@@ -24,7 +26,7 @@ class BoardManager(models.Manager):
         return self._create_board(boardname)
 
     def validate_max_number_of_boards(self, num_of_boards):
-#       Number of Boards are already more than or equal to 10?        
+        #       Number of Boards are already more than or equal to 10?
         if num_of_boards >= 10:
             raise ValidationError(msg.boards_max_number_of_boards)
         return True
@@ -41,7 +43,7 @@ class BoardManager(models.Manager):
 
 
 ##########
-##### RETRIEVE
+# RETRIEVE
     def get_board(self, id):
         try:
             return Board.objects.get(pk=id)
@@ -49,7 +51,7 @@ class BoardManager(models.Manager):
             return None
 
 ##########
-##### UPDATE : This is only applied in admin page.
+# UPDATE : This is only applied in admin page.
     def update_board(self, id, **extra_fields):
         board = Board.objects.get_board(id)
         if 'boardname' in extra_fields:
@@ -57,60 +59,60 @@ class BoardManager(models.Manager):
             board.boardname = extra_fields['boardname']
         else:
             raise ValueError()
-        board.save(using = self._db)
+        board.save(using=self._db)
 
 ##########
-##### DELETE
+# DELETE
     def delete_board(self, id):
         board = Board.objects.get(id=id)
         board.delete()
+
 
 class Board(models.Model):
     objects = BoardManager()
 
     boardname = models.CharField(
-                    help_text = "Board name",
-                    max_length = 255,
-                    default = '',
-                )
+        help_text="Board name",
+        max_length=255,
+        default='',
+    )
 
     """
     * Warning : char field is set to unicode
     """
     readperm = MultiSelectField(
-                    help_text = ('Available Read Permission (It is possible'
-                    ' to select multiple[None, User, Member, '
-                    'Core member, Graduate, President ]'),
-                    choices = (('0', 'None'), ('1', 'User'), ('2', 'Member'), 
-                        ('3', 'Core member'), ('4', 'Graduate'), 
-                        ('5', 'President')),
-                    default = ['0', '1','2','3','4','5'],
-                    max_length = 11,
-                    max_choices = 6,
-               )
-                   
+        help_text=('Available Read Permission (It is possible'
+                   ' to select multiple[None, User, Member, '
+                   'Core member, Graduate, President ]'),
+        choices = (('0', 'None'), ('1', 'User'), ('2', 'Member'),
+                   ('3', 'Core member'), ('4', 'Graduate'),
+                   ('5', 'President')),
+        default = ['0', '1', '2', '3', '4', '5'],
+        max_length = 11,
+        max_choices = 6,
+    )
+
     writeperm = MultiSelectField(
-                    help_text = ('Available Write Permission (It is possible'
-                    'to select multiple[None, User, Member, '
-                    'Core member, Graduate, President ]'),
-                    choices = (('1', 'User'), ('2', 'Member'), 
-                        ('3', 'Core member'), ('4', 'Graduate'), 
-                        ('5', 'President')),
-                    default = ['0', '1', '2', '3', '4', '5'],
-                    max_length = 9,
-                    max_choices = 5,
-               )
+        help_text=('Available Write Permission (It is possible'
+                   'to select multiple[None, User, Member, '
+                   'Core member, Graduate, President ]'),
+        choices = (('1', 'User'), ('2', 'Member'),
+                   ('3', 'Core member'), ('4', 'Graduate'),
+                   ('5', 'President')),
+        default = ['0', '1', '2', '3', '4', '5'],
+        max_length = 9,
+        max_choices = 5,
+    )
 
 #   for showing user name instead of object itself in admin page
     def __unicode__(self):
-       return 'Board name: ' + self.boardname
- 
+        return 'Board name: ' + self.boardname
+
 
 class AttachmentFileManager(models.Manager):
 
     def create_attachment(self, uploader, file_name, tmp_file_path):
         return self._create_attachment(uploader, file_name, tmp_file_path)
-
 
     def _create_attachment(self, uploader, file_name, tmp_file_path):
         attachment = self.model(uploader=uploader, file_name=file_name)
@@ -126,10 +128,10 @@ class AttachmentFileManager(models.Manager):
 
         attachment.save()
 
-        return attachment;
+        return attachment
 
     def hashfile(self, file_path, hasher=None, blocksize=65536):
-        if hasher == None:
+        if hasher is None:
             hasher = hashlib.md5()
         with open(file_path) as afile:
             buf = afile.read(blocksize)
@@ -146,32 +148,33 @@ class AttachmentFileManager(models.Manager):
         else:
             return None
 
+
 class AttachmentFile(models.Model):
     objects = AttachmentFileManager()
     uploader = models.ForeignKey(User)
 
     file_name = models.CharField(
-                  help_text = "Attachment file's name",
-                  max_length = 255,
-                  default = '',
-              )
+        help_text="Attachment file's name",
+        max_length=255,
+        default='',
+    )
 
     md5_hash = models.CharField(
-                  help_text = "Attachment file's name",
-                  max_length = 255,
-                  default = '',
-                  db_index=True,
-              )
+        help_text="Attachment file's name",
+        max_length=255,
+        default='',
+        db_index=True,
+    )
 
-    timestamp = models.DateTimeField(auto_now_add=True, 
-                                    help_text = "Uploaded time")
+    timestamp = models.DateTimeField(auto_now_add=True,
+                                     help_text="Uploaded time")
 
 
 class PostManager(models.Manager):
-    
+
     clear = ClearTag()
 
-    ##### CREATE
+    # CREATE
     def _create_post(self, board, writer, subject, **extra_fields):
         is_valid_content = False
         is_valid_writer = False
@@ -184,9 +187,9 @@ class PostManager(models.Manager):
 
 #       writer
         is_valid_writer = self.is_valid_writeperm(
-                              board = board, 
-                              writer = writer
-                          )
+            board=board,
+            writer=writer
+        )
         if not is_valid_writer:
             raise ValidationError(msg.boards_writer_perm_error)
 
@@ -199,19 +202,19 @@ class PostManager(models.Manager):
 #       content
         if 'content' in extra_fields:
             content = extra_fields['content']
-            content = PostManager.clear.clear_tag(content) # escape content
+            content = PostManager.clear.clear_tag(content)  # escape content
             is_valid_content = self.validate_content(content)
 
 #       post save ( caution : board is not parameter for post model )
         post = self.model(board=board, writer=writer, subject=subject)
-        
+
         if is_valid_content:
             post.content = content
 
 #       is_notice
         if 'is_notice' in extra_fields:
             is_notice = extra_fields['is_notice']
-            if is_notice =="option1":
+            if is_notice == "option1":
                 post.is_notice = True
 
         post.save(using=self._db)
@@ -219,18 +222,18 @@ class PostManager(models.Manager):
 
     def create_post(self, board, subject, writer, **extra_fields):
         return self._create_post(board=board, subject=subject, writer=writer,
-                **extra_fields)
-    
+                                 **extra_fields)
+
     def validate_subject(self, subject):
         if not subject:
             raise ValueError(msg.boards_post_subject_must_be_set)
         elif len(subject) > 255:
             raise ValidationError(msg.boards_post_subject_at_most_255)
-    
+
     def validate_content(self, content):
-       # if len(content) > 65535:
-       #      raise ValidationError(msg.boards_post_content_at_most_65535)
-       # else:
+        # if len(content) > 65535:
+        #      raise ValidationError(msg.boards_post_content_at_most_65535)
+        # else:
         return True
 
     def is_valid_writeperm(self, board, writer):
@@ -244,7 +247,7 @@ class PostManager(models.Manager):
 #        return bool(writer.userperm in board.writeperm)
 
     ##########
-    ##### RETRIEVE
+    # RETRIEVE
     def get_post(self, id):
         try:
             return Post.objects.get(pk=id)
@@ -252,7 +255,7 @@ class PostManager(models.Manager):
             return None
 
     ##########
-    ##### UPDATE
+    # UPDATE
     def update_post(self, post_id, **extra_fields):
         post = Post.objects.get_post(post_id)
         if 'subject' in extra_fields:
@@ -271,51 +274,54 @@ class PostManager(models.Manager):
         post.hit_count += 1
         post.save()
 
+
 class Post(models.Model):
     objects = PostManager()
     writer = models.ForeignKey(User)
     board = models.ForeignKey(Board)
     subject = models.CharField(
-                  help_text = "Post subject",
-                  max_length = 255,
-                  default = '',
-              )
+        help_text="Post subject",
+        max_length=255,
+        default='',
+    )
 
     content = models.TextField(
-                  help_text = "Post content",
-                  # max_length = 65535,
-                  default = '',
-              )
+        help_text="Post content",
+        # max_length = 65535,
+        default='',
+    )
 
-#   It is used to show date posted in admin page 
-    date_posted = models.DateTimeField(db_index=True, auto_now_add=True, 
-            help_text = "It is used to show the date posted in admin page")
-   
+#   It is used to show date posted in admin page
+    date_posted = models.DateTimeField(db_index=True, auto_now_add=True,
+                                       help_text="It is used to show the date posted in admin page")
+
     is_notice = models.BooleanField(
-                    help_text = "Is this post a notice?",
-                    default=False
-                )
-    
+        help_text="Is this post a notice?",
+        default=False
+    )
+
     hit_count = models.IntegerField(
-                    help_text = "counting of watched",
-                    default = 0,
-                )
+        help_text="counting of watched",
+        default=0,
+    )
     attachments = models.ManyToManyField(AttachmentFile)
 
 #   for showing post information instead of object itself
     def __unicode__(self):
-       return ('Writer: ' + self.writer.username + ", " +\
+        return ('Writer: ' + self.writer.username + ", " +
                 "Subject: " + self.subject)
 
+
 class CommentManager(models.Manager):
-    ##### CREATE
+    # CREATE
+
     def _create_comment(self, writer, board, post, comment):
         is_valid_writer = False
 #       writer
         is_valid_writer = Post.objects.is_valid_writeperm(
-                              board = board, 
-                              writer = writer
-                          )
+            board=board,
+            writer=writer
+        )
         if not is_valid_writer:
             raise ValidationError(msg.boards_writer_perm_error)
 
@@ -336,15 +342,15 @@ class CommentManager(models.Manager):
 
 #       commentobject save
         commentobject = self.model(writer=writer, post=post, board=board,
-                            comment=comment)
-        
+                                   comment=comment)
+
         commentobject.save(using=self._db)
 
         return commentobject
-        
+
     def create_comment(self, writer, board, post, comment):
         return self._create_comment(writer=writer, board=board, post=post,
-                comment=comment)
+                                    comment=comment)
 
     def validate_comment(self, comment):
         if not comment:
@@ -353,7 +359,7 @@ class CommentManager(models.Manager):
             raise ValidationError(msg.boards_comment_at_most_255)
 
     ##########
-    ##### RETRIEVE
+    # RETRIEVE
     def get_comment(self, id):
         try:
             return Comment.objects.get(pk=id)
@@ -361,7 +367,7 @@ class CommentManager(models.Manager):
             return None
 
     ##########
-    ##### UPDATE
+    # UPDATE
     def update_comment(self, comment_id, **extra_fields):
         commentobject = Comment.objects.get_comment(comment_id)
         if 'comment' in extra_fields:
@@ -371,6 +377,7 @@ class CommentManager(models.Manager):
 
         commentobject.save()
 
+
 class Comment(models.Model):
     objects = CommentManager()
     writer = models.ForeignKey(User)
@@ -378,14 +385,14 @@ class Comment(models.Model):
     post = models.ForeignKey(Post)
 
     comment = models.CharField(
-                  help_text = "Comment",
-                  max_length = 255,
-              )
+        help_text="Comment",
+        max_length=255,
+    )
 
-    date_commented = models.DateTimeField(db_index=True, auto_now_add=True, 
-            help_text = "It is used to show the date commented")
-    
+    date_commented = models.DateTimeField(db_index=True, auto_now_add=True,
+                                          help_text="It is used to show the date commented")
+
 #   for showing comment information instead of object itself
     def __unicode__(self):
-       return ('Writer: ' + self.writer.username + ", " +\
+        return ('Writer: ' + self.writer.username + ", " +
                 "Comment: " + self.comment)

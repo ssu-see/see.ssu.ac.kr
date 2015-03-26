@@ -13,16 +13,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='LinkPost',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('description', models.CharField(help_text=b'A description about the link', max_length=255)),
-                ('url', models.URLField(help_text=b'An URL for link to some information')),
-                ('date_posted', models.DateTimeField(help_text=b'It is used to show date when the link posted', auto_now_add=True, db_index=True)),
-                ('writer', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-    ]
+            name='LinkPost', fields=[
+                ('id', models.AutoField(
+                    verbose_name='ID', serialize=False, auto_created=True, primary_key=True)), ('description', models.CharField(
+                        help_text=b'A description about the link', max_length=255)), ('url', models.URLField(
+                            help_text=b'An URL for link to some information')), ('date_posted', models.DateTimeField(
+                                help_text=b'It is used to show date when the link posted', auto_now_add=True, db_index=True)), ('writer', models.ForeignKey(
+                                    to=settings.AUTH_USER_MODEL)), ], options={}, bases=(
+                models.Model,), ), ]

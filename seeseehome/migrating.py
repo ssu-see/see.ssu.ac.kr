@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import click
 import subprocess
+
+
 @click.command()
 #@click.option('-h', default=1, help='')
-
 # Scenario
 # makemigrations -> migrate
 def migrating_set():
@@ -22,7 +23,6 @@ def migrating_set():
         ]
     )
 
-
     subprocess.call(
         [
             "python",
@@ -39,7 +39,6 @@ def migrating_set():
             "migrate",
         ]
     )
-
 
 
 if __name__ == '__main__':

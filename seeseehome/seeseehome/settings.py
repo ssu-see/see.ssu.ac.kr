@@ -16,8 +16,8 @@ import os
 # During development, such warnings into ignore status
 import warnings
 warnings.filterwarnings(
-        'ignore', r"DateTimeField .* received a naive datetime",
-        RuntimeWarning, r'django\.db\.models\.fields')
+    'ignore', r"DateTimeField .* received a naive datetime",
+    RuntimeWarning, r'django\.db\.models\.fields')
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
@@ -47,12 +47,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-#   Custom apps
+    #   Custom apps
     'users',
     'boards',
     'linkboard',
 
-#   Django Packages
+    #   Django Packages
     'ckeditor',
     'multiselectfield',
 )
@@ -115,8 +115,8 @@ STATIC_URL = '/static/'
 
 # This setting defines the additional locations
 STATICFILES_DIRS = (
-   os.path.join(BASE_DIR, 'static'),
-   os.path.join(BASE_DIR, 'assets'),
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'assets'),
 )
 
 LOGIN_URL = "/sign-in/"
@@ -133,16 +133,16 @@ CKEDITOR_JQUERY_URL = \
 
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar_Full' : [
+        'toolbar_Full': [
             ["Styles", "Format", "Bold", "Italic", "Underline", "Strike", "SpellChecker", "Undo", "Redo"],
             ["Link", "Unlink", "Anchor"],
             ["attachment", "Image", "Table", "HorizontalRule"],
             ["TextColor", "BGColor"],
             ["Smiley", "SpecialChar"],
             ["Source"]
-            ],
+        ],
         'language': 'ko-kr',
-        'width' : '100%',
+        'width': '100%',
         'height': '400px',
     },
 }
