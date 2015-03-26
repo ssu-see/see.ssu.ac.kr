@@ -13,6 +13,8 @@ from boards.models import Board
 # I couldn't solve built-in authenticate problem yet
 # So I use custom authenticate(But It is almost same as built-in authenticate)
 # It can authenticate username and email
+
+
 def authenticate(username=None, password=None):
     try:
         user = User.objects.get(username=username)
@@ -26,8 +28,9 @@ def authenticate(username=None, password=None):
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         return user
 
+
 def signin(request):
-#	If is the user already logged in?
+    #	If is the user already logged in?
 
     if request.user.is_authenticated():
         messages.error(request, msg.users_login_error)
@@ -37,7 +40,7 @@ def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['pwd']
-        user = authenticate(username = username, password = password)
+        user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
                 _login(request, user)
@@ -62,10 +65,11 @@ def signin(request):
             next = request.GET['next']
 
         boardlist = Board.objects.all()
-        return render(request, "users/signin.html", {'next' : next,
-                'boardlist' : boardlist})
+        return render(request, "users/signin.html", {'next': next,
+                                                     'boardlist': boardlist})
 
         return render(request, "users/signin.html", {'next': next})
+
 
 def logout(request):
     if request.user.__class__.__name__ is 'AnonymousUser':
@@ -78,22 +82,23 @@ def logout(request):
 
     return HttpResponseRedirect(reverse("home"))
 
+
 def signup(request):
     is_contact_number = False
-    ### username
+    # username
     if request.method == 'POST':
         username = request.POST['username']
 #       username validator
         try:
             User.objects.validate_username(username)
         except ValidationError:
-          messages.error(request, msg.users_signup_error)
-          messages.info(request, msg.users_invalid_name)
-          return HttpResponseRedirect(reverse("users:signup"))
+            messages.error(request, msg.users_signup_error)
+            messages.info(request, msg.users_invalid_name)
+            return HttpResponseRedirect(reverse("users:signup"))
 
 #       username unique check
         try:
-            User.objects.get(username = username)
+            User.objects.get(username=username)
         except ObjectDoesNotExist:
             pass
         else:
@@ -112,7 +117,7 @@ def signup(request):
 
 #       email unique check
         try:
-            User.objects.get(email = email)
+            User.objects.get(email=email)
         except ObjectDoesNotExist:
             pass
         else:
@@ -138,7 +143,7 @@ def signup(request):
 
 #       contact number
         if ('contact_number' in request.POST) and \
-            (str(request.POST['contact_number']) != ""):
+                (str(request.POST['contact_number']) != ""):
             contact_number = request.POST['contact_number']
             try:
                 User.objects.validate_contact_number(contact_number)
@@ -150,24 +155,26 @@ def signup(request):
                 is_contact_number = True
 
 #       User Registration
-        user = User.objects.create_user(username = username, email = email,
-                                password = password)
+        user = User.objects.create_user(username=username, email=email,
+                                        password=password)
 
         if is_contact_number:
-            User.objects.update_user(user.id, contact_number = contact_number)
+            User.objects.update_user(user.id, contact_number=contact_number)
 
         messages.success(request, msg.users_signup_success)
         messages.info(request, msg.users_signup_success_info)
         return HttpResponseRedirect(reverse("users:signin"))
 
     boardlist = Board.objects.all()
-    return render(request, "users/signup.html", {'boardlist' : boardlist})
+    return render(request, "users/signup.html", {'boardlist': boardlist})
+
 
 @login_required
 def personalinfo(request):
     boardlist = Board.objects.all()
     return render(request, "users/personalinfo.html",
-            {'boardlist' : boardlist})
+                  {'boardlist': boardlist})
+
 
 @login_required
 def editpersonalinfo(request):
@@ -177,18 +184,18 @@ def editpersonalinfo(request):
 
 #       Is there difference in user name?
         if (request.user.username != username) and \
-          (str(username) != ""):
-#          username validator
+                (str(username) != ""):
+            #          username validator
             try:
                 User.objects.validate_username(username)
             except ValidationError:
-              messages.error(request, msg.users_editpersonalinfo_error)
-              messages.info(request, msg.users_invalid_name)
-              return HttpResponseRedirect(reverse("users:editpersonalinfo"))
+                messages.error(request, msg.users_editpersonalinfo_error)
+                messages.info(request, msg.users_invalid_name)
+                return HttpResponseRedirect(reverse("users:editpersonalinfo"))
 
 #           username unique check
             try:
-                User.objects.get(username = username)
+                User.objects.get(username=username)
             except ObjectDoesNotExist:
                 pass
             else:
@@ -198,7 +205,7 @@ def editpersonalinfo(request):
 
             User.objects.update_user(
                 request.user.id,
-                username = username
+                username=username
             )
 
 #       email
@@ -214,7 +221,7 @@ def editpersonalinfo(request):
 
 #           email unique check
             try:
-                User.objects.get(email = email)
+                User.objects.get(email=email)
             except ObjectDoesNotExist:
                 pass
             else:
@@ -224,14 +231,14 @@ def editpersonalinfo(request):
 
             User.objects.update_user(
                 request.user.id,
-                email = email,
+                email=email,
             )
 
 #       contact number
         contact_number = request.POST['contact_number']
 #       Is there difference in contact number
         if (request.user.contact_number != contact_number) and \
-          ((str(contact_number) != "")):
+                ((str(contact_number) != "")):
             try:
                 User.objects.validate_contact_number(contact_number)
             except ValidationError:
@@ -241,19 +248,20 @@ def editpersonalinfo(request):
             else:
                 User.objects.update_user(
                     request.user.id,
-                    contact_number = contact_number,
+                    contact_number=contact_number,
                 )
         messages.success(request, msg.users_editpersonalinfo_success)
         return HttpResponseRedirect(reverse("users:personalinfo"))
 
     boardlist = Board.objects.all()
     return render(request, "users/editpersonalinfo.html",
-            {'boardlist' : boardlist})
+                  {'boardlist': boardlist})
+
 
 @login_required
 def editpassword(request):
     if request.method == 'POST':
-#       password
+        #       password
         password = request.POST['pwd']
 #       check present password
         if not request.user.check_password(password):
@@ -270,7 +278,7 @@ def editpassword(request):
             messages.info(request, msg.users_confirm_pwd_error)
             return HttpResponseRedirect(reverse("users:editpwd"))
         else:
-#       check if new password is valid
+            #       check if new password is valid
             try:
                 User.objects.validate_password(new_password)
             except ValidationError:
@@ -287,5 +295,4 @@ def editpassword(request):
         return HttpResponseRedirect(reverse("users:signin"))
 
     boardlist = Board.objects.all()
-    return render(request, "users/editpwd.html", {'boardlist' : boardlist})
-
+    return render(request, "users/editpwd.html", {'boardlist': boardlist})

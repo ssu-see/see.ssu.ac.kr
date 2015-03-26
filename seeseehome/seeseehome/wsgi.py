@@ -16,8 +16,7 @@ import sys
 
 path = '/home/seebuntu/github/home/seeseehome'
 if path not in sys.path:
-      sys.path.append(path)
+    sys.path.append(path)
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
-

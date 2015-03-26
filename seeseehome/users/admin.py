@@ -8,6 +8,7 @@ admin.site.unregister(Group)
 
 
 class UserAdmin(admin.ModelAdmin):
+
     def has_add_permission(self, request):
         return False
 

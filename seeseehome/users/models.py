@@ -12,10 +12,12 @@ import re
 from django.db import OperationalError
 from seeseehome import msg
 
+
 class UserManager(BaseUserManager):
-##### CREATE
+    # CREATE
+
     def _create_user(self, username, email, password,
-        is_admin=False, **extra_fields):
+                     is_admin=False, **extra_fields):
         """
         It Creates and saves a User with the given username, email and
         password, and values in extra fields.
@@ -42,7 +44,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, username, email, password, **extra_fields):
         user = self._create_user(username, email, password,
-                is_admin=True, **extra_fields)
+                                 is_admin=True, **extra_fields)
         return user
 
     def validate_username(self, username):
@@ -76,9 +78,10 @@ class UserManager(BaseUserManager):
                    password)) is False:
             raise ValidationError(msg.users_pwd_no_special_char)
         """
+
     def validate_userperm(self, userperm):
         if (userperm == 1) or (userperm == 2) or (userperm == 3) or \
-            (userperm == 4) or (userperm == 5):
+                (userperm == 4) or (userperm == 5):
             pass
         else:
             raise ValidationError(
@@ -101,20 +104,21 @@ class UserManager(BaseUserManager):
                 "contact number should be number, and '-' is only available")
 
 ##########
-##### RETRIEVE
+# RETRIEVE
     def get_user(self, id):
         try:
             return User.objects.get(pk=id)
         except User.DoesNotExist:
             return None
 ##########
-##### UPDATE
+# UPDATE
+
     def update_user(self, id, **extra_fields):
         user = User.objects.get_user(id)
         if 'username' in extra_fields:
             self.validate_username(extra_fields['username'])
             try:
-                User.objects.get(username = extra_fields['username'])
+                User.objects.get(username=extra_fields['username'])
             except ObjectDoesNotExist:
                 user.username = extra_fields['username']
             else:
@@ -123,7 +127,7 @@ class UserManager(BaseUserManager):
         if 'email' in extra_fields:
             validate_email(extra_fields['email'])
             try:
-                User.objects.get(email = extra_fields['email'])
+                User.objects.get(email=extra_fields['email'])
             except ObjectDoesNotExist:
                 user.email = extra_fields['email']
             else:
@@ -140,20 +144,20 @@ class UserManager(BaseUserManager):
 
         if 'is_admin' in extra_fields:
             is_admin = extra_fields['is_admin']
-            if type(is_admin) is bool:
+            if isinstance(is_admin, bool):
                 user.is_admin = is_admin
             else:
                 raise ValidationError(
-                        msg.users_update_is_admin_must_be_bool_type)
+                    msg.users_update_is_admin_must_be_bool_type)
 
-
-        user.save(using = self._db)
+        user.save(using=self._db)
 
 ##########
-##### DELETE
+# DELETE
     def delete_user(self, id):
         user = self.get(id=id)
         user.delete()
+
 
 class User(AbstractBaseUser):
     objects = UserManager()
@@ -165,48 +169,48 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ['email']
 
     username = models.CharField(
-               help_text = "User name",
-               max_length = 30,
-               unique = True,
-           )
+        help_text="User name",
+        max_length=30,
+        unique=True,
+    )
     email = models.EmailField(
-                help_text = "User email",
-                max_length = 64,
-                unique = True,
-            )
+        help_text="User email",
+        max_length=64,
+        unique=True,
+    )
 
     contact_number = models.CharField(
-                      help_text = "User Contact Number",
-                      max_length=30,
-                  )
+        help_text="User Contact Number",
+        max_length=30,
+    )
 
     is_active = models.BooleanField(
-                    help_text = "Is active user?",
-                    default=True
-                )
+        help_text="Is active user?",
+        default=True
+    )
 
     """
     If you want your custom User model to also work with Admin,
     your User model must define some additional attributes and methods.
     """
     is_admin = models.BooleanField(
-                   help_text=('Is the user can access & edit admin page?'),
-                   default=False,
-                   )
+        help_text=('Is the user can access & edit admin page?'),
+        default=False,
+    )
 
     """
     Read/Write permission of Board model is described to multiple select field.
     That is constructed by Char field.
     """
     userperm = models.CharField(
-                   help_text = 'Available User Permission [ User, Member, '
-                    'Core member, Graduate, President ]',
-                   choices = (('1', 'User',), ('2', 'Member'),
-                       ('3', 'Core member'), ('4', 'Graduate'),
-                       ('5', 'President')),
-                   default='1',
-                   max_length = 1,
-               )
+        help_text='Available User Permission [ User, Member, '
+        'Core member, Graduate, President ]',
+        choices=(('1', 'User',), ('2', 'Member'),
+                 ('3', 'Core member'), ('4', 'Graduate'),
+                 ('5', 'President')),
+        default='1',
+        max_length = 1,
+    )
 
     signup_date = models.DateTimeField(
         blank=True,
@@ -241,6 +245,7 @@ class User(AbstractBaseUser):
     The following two method 'has_perm', 'has_module_perms' is important to
     access built-in admin site.
     """
+
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
@@ -253,5 +258,4 @@ class User(AbstractBaseUser):
 
 #   for showing user name instead of object itself
     def __unicode__(self):
-       return 'User name: ' + self.username
-
+        return 'User name: ' + self.username
