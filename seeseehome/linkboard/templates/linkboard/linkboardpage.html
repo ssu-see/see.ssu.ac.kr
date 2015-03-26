@@ -25,46 +25,53 @@
       <div class="row">
        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
          <h1 class="page-header">Link board
-           {% if top50 and searchvalue %}
+           {% if top51 and searchvalue %}
              {{ top50 }} : "{{searchvalue}}" 
            {% endif %}
          </h1>
 
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped board-table">
               <thead>
                 <tr>
-                  <th width="60%">Description</th>
-                  <th width="5%"></th>
-                  <th width="5%"></th>
-                  <th width="10%">Writer</th>
-                  <th width="20%">Date posted</th>
+                  <th class="number">no</th>
+                  <th class="description">description</th>
+                  <th class="writer">writer</th>
+                  <th class="date">date</th>
+                  <th class="edit"></th>
+                  <th class="delete"></th>
                 </tr>
               </thead>
               <tbody>
-
                 {% if posts %}
-                 {% for post in posts %}
-                   <tr>
-                     <td width="60%"><a href="{{post.url}}" target="_blank">{{ post.description }}</a></td>
-                       {% if post.writer == user %}
-                         <p>
-                         <th width="5%">
-                           <button type="button" class="btn btn-default btn-xs"><a href="{% url 'linkboard:updatelinkpost' post.id %}">Rewrite</a></button>
-                         </th>
-                         <th width="5%">
-                           <button type="button" class="btn btn-danger btn-xs"><a href="{% url 'linkboard:deletelinkpost' post.id %}">Delete</a></button>
-                         </th>
-                       </p>
-                       {% endif %}
-                     <td width="10%">{{ post.writer.username }}</td>
-                     <td width="20%">{{ post.date_posted }} </td>
-                   </tr>
-                 {% endfor %}  
+                  {% for post in posts %}
+                    <tr>
+                      <td class="number">
+                        <div>
+                          {{ forloop.counter|add:post_base_index}}
+                        </div>
+                      </td>
+                      <td class="description">
+                        <a href="{{post.url}}" target="_blank">{{ post.description }}</a>
+                      </td>
+                      <td class="writer">{{ post.writer.username }}</td>
+                      <td class="date">{{ post.date_posted | date:"Y.m.d"}} </td>
+                        {% if post.writer == user %}
+                          <td class="edit">
+                            <button type="button" class="btn btn-default btn-xs"><a href="{% url 'linkboard:updatelinkpost' post.id %}">Edit</a></button>
+                          </td>
+                          <td class="delete">
+                            <button type="button" class="btn btn-danger btn-xs"><a href="{% url 'linkboard:deletelinkpost' post.id %}">Delete</a></button>
+                          </td>
+                      {% else %}
+                        <td class="edit">
+                        <td class="delete">
+                      {% endif %}
+                    </tr>
+                  {% endfor %}  
                  {% endif %}
                </tbody>
             </table>
-
                 <div class="page-footer">
                  {% if has_previous %}
                    <a href="{% url 'linkboard:linkboardpage' previous_page %}">Prev</a>
@@ -75,8 +82,6 @@
                  {% endif %}
 
                  </div>
-
-
           </div>
         </div>
       </div>
