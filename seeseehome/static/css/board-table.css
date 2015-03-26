@@ -1,0 +1,68 @@
+.board-table {
+  border-top: 2px solid #ddd;
+}
+.board-table .number {
+  width: 65px;
+  text-align: center;
+}
+.board-table .subject {
+}
+.board-table .description {
+}
+
+.board-table .writer {
+  width: 90px;
+  text-align: center;
+  font-size: 11px;
+  color: #555;
+}
+
+.board-table .date {
+  width: 85px;
+  text-align: center;
+  font-size: 11px;
+  color: #555;
+}
+.board-table .hits {
+  width: 65px;
+  text-align: center;
+  font-size: 11px;
+  color: #555;
+}
+.search-range {
+  width: 98px !important;
+}
+.board-search {
+  max-width: 380px;
+  float: right;
+
+}
+.board-footer-list {
+  margin: 10px 0;
+}
+.notice-block {
+  background: white;
+  border: 1px solid #ccc;
+  display: inline;
+  padding: 5px 7px;
+  font-size: 12px;
+  color: #333;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+/* Followed styles should be seprated to linkboard.css later */
+.board-table .description {
+}
+.board-table .edit {
+  width: 32px;
+  text-align: center;
+  font-size: 11px;
+  color: #555;
+}
+.board-table .delete {
+  width: 32px;
+  text-align: center;
+  font-size: 11px;
+  color: #555;
+}

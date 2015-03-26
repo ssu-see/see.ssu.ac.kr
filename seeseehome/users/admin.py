@@ -8,11 +8,13 @@ admin.site.unregister(Group)
 
 
 class UserAdmin(admin.ModelAdmin):
+
     def has_add_permission(self, request):
         return False
 
     form = UserForm
-    list_display = ('username', 'email', 'contact_number', 'userperm')
+    list_display = ('username', 'email', 'contact_number', 'userperm',
+                    'signup_date')
 #   admin does not have edit following fields
     exclude = ('password', 'username', 'email',
                'last_login', 'contact_number')

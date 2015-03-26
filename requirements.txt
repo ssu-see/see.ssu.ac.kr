@@ -12,3 +12,5 @@ six==1.7.3
 wsgiref==0.1.2
 Pillow==2.6.1
 django-sendfile==0.3.6
+autopep8
+django-mathfilters==0.3.0
