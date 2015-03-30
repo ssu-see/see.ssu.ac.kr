@@ -15,3 +15,6 @@ django-sendfile==0.3.6
 autopep8
 django-mathfilters==0.3.0
 django-grappelli
+django-nose
+django-extensions
+django-debug-toolbar
