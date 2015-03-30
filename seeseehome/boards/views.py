@@ -1,12 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, request, Http404
+from django.http import HttpResponseRedirect, Http404
 from boards.models import *
 from seeseehome import msg
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-#from boards.forms import WriteForm
 from django.core.paginator import Paginator
 from ckeditor_form import CkEditorForm
 
@@ -29,20 +28,9 @@ def check_invalid_readperm_with_message(request, board, reader):
 
 @login_required
 def write(request, board_id, **extra_fields):
-    #   django-ckform not used.
-    #   ckeditor widget class is used in template instead)
-    #   form = WriteForm()
-
-    #   for prevent the error "referenced before assignment"
-    #post_id = None
-
-    #   board : argument for is_valid_writeperm
     board = Board.objects.get_board(board_id)
-
-#   writer : argument for is_valid_writeperm
     writer = User.objects.get_user(request.user.id)
 
-#   does the writer have valid write permission?
     if not Post.objects.is_valid_writeperm(
             board=board, writer=writer):
         messages.error(request, msg.boards_write_error)
@@ -86,7 +74,7 @@ def write(request, board_id, **extra_fields):
             is_notice = request.POST['is_notice']
 
 #       post save
-        if not 'post_id' in extra_fields:
+        if 'post_id' not in extra_fields:
             post = Post.objects.create_post(board=board, subject=subject,
                                             writer=writer, is_notice=is_notice)
 #           content save
@@ -96,7 +84,7 @@ def write(request, board_id, **extra_fields):
             if 'file_keys' in request.POST:
                 for file_key in request.POST.getlist('file_keys'):
                     attachment_file = AttachmentFile.objects.file_by_hash_key(file_key)
-                    if not attachment_file is None:
+                    if attachment_file is not None:
                         Post.objects.update_post(post.id, attachment_file=attachment_file)
 
             return HttpResponseRedirect(reverse("boards:postpage",
@@ -113,7 +101,7 @@ def write(request, board_id, **extra_fields):
             if 'file_keys' in request.POST:
                 for file_key in request.POST['file_keys']:
                     attachment_file = AttachmentFile.objects.file_by_hash_key(file_key)
-                    if not attachment_file is None:
+                    if attachment_file is not None:
                         Post.objects.update_post(post_id, attachment_file=attachment_file)
 
             messages.success(request, msg.boards_write_success)
@@ -136,11 +124,9 @@ def rewrite(request, board_id, post_id):
     board = Board.objects.get_board(board_id)
 #    boardposts = BoardPosts.objects.filter(board=board)
     post = Post.objects.get_post(post_id)
-    posts = Post.objects.filter(board=board)
 
     if request.method == 'POST':
         write(request, board_id, post_id=post_id)
-        posts = Post.objects.filter(board=board).order_by("-date_posted")
         return HttpResponseRedirect(reverse("boards:postpage",
                                             args=(board_id, post_id)))
 
@@ -179,21 +165,14 @@ def postpage(request, board_id, post_id):
             messages.error(request, msg.board_comment_error)
             messages.info(request, msg.board_comment_at_most_255)
         else:
-<<<<<<< HEAD
+
             try:
                 Comment.objects.create_comment(
-                    writer=request.user, board = board,
-                    post = post, comment = comment
+                    writer=request.user, board=board,
+                    post=post, comment=comment
                 )
             except ValidationError:
-                messages.error(request, msg.boards_writer_perm_error))
-    
-=======
-            Comment.objects.create_comment(
-                writer=request.user, board=board,
-                post=post, comment=comment
-            )
->>>>>>> d4ead2ab53b09dc58c119ad6e1b474ec923e45f6
+                messages.error(request, msg.boards_writer_perm_error)
 
     commentlist = \
         Comment.objects.filter(post=post).order_by('date_commented')
@@ -255,10 +234,8 @@ def pagination(posts, posts_per_page=10, page_num=1):
 
 
 def boardpage(request, board_id, page=1):
-    #   board : for is_valid_readperm
     board = Board.objects.get_board(board_id)
 
-#   reader : for is_valid_readperm
     reader = User.objects.get_user(request.user.id)
     posts_per_page = 10
 
@@ -267,15 +244,11 @@ def boardpage(request, board_id, page=1):
     except:
         raise Http404
 
-#   Does the reader has valid write permission?
     if check_invalid_readperm_with_message(request, board, reader) is False:
         return HttpResponseRedirect(reverse("home"))
 
-#   The following line is important to the page list (prev page, next page)
     posts = Post.objects.filter(board=board).order_by("-date_posted")
 
-#   Caution : Following lines are implemented after ordering post data
-#   Is there a request method of post that searches specific posts?
     if request.method == "POST":
         search_post = request.POST['search_post']
 
@@ -320,7 +293,7 @@ def boardpage(request, board_id, page=1):
 #   if page does not exist, then raise 404
     try:
         custom_paginator = pagination(posts=posts, posts_per_page=posts_per_page, page_num=page)
-    except Exception as e:
+    except:
         raise Http404
 
 #   for board list of menu bar

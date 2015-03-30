@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, request
+from django.http import HttpResponseRedirect
 from users.models import User
 from seeseehome import msg
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -30,8 +30,6 @@ def authenticate(username=None, password=None):
 
 
 def signin(request):
-    #	If is the user already logged in?
-
     if request.user.is_authenticated():
         messages.error(request, msg.users_login_error)
         messages.info(request, msg.users_already_logged_in)
