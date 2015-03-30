@@ -169,6 +169,9 @@ class AttachmentFile(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True,
                                      help_text="Uploaded time")
 
+    def __unicode__(self):
+        return self.file_name
+
 
 class PostManager(models.Manager):
 
@@ -304,9 +307,8 @@ class Post(models.Model):
         help_text="counting of watched",
         default=0,
     )
-    attachments = models.ManyToManyField(AttachmentFile)
+    attachments = models.ManyToManyField(AttachmentFile, blank=True)
 
-#   for showing post information instead of object itself
     def __unicode__(self):
         return ('Writer: ' + self.writer.username + ", " +
                 "Subject: " + self.subject)
