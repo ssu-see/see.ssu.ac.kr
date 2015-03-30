@@ -46,5 +46,5 @@ Thumbs.db
 # Custom environment setting 
 .env
 
-# Custom admin
+# Custom admin style static files
 grappelli/
