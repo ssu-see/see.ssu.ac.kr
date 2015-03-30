@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+
 import hashlib
 import os
 import shutil
-from seeseehome.settings import BASE_DIR
+from seeseehome.settings.partials.application import BASE_DIR
 from django.db import models
 from users.models import User
 from seeseehome import msg
