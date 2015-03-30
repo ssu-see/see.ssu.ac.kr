@@ -8,30 +8,30 @@ try:
 except:
     ADMIN_URL = "admin_for_insecure_because_not_set_secret_admin_url"
 
-urlpatterns = patterns('',
-                       #   admin page
-                       url(r'^' + ADMIN_URL + '/', include(admin.site.urls), name="admin"),
+urlpatterns = patterns(
+    '',
+    #   admin page
+    url(r'^' + ADMIN_URL + '/', include(admin.site.urls), name="admin"),
 
-                       #   main page
-                       url(r'^$', 'seeseehome.views.home', name='home'),
+    #   main page
+    url(r'^$', 'seeseehome.views.home', name='home'),
 
-                       #   about us
-                       url(r'^aboutus/', 'seeseehome.views.aboutus', name='aboutus'),
+    #   about us
+    url(r'^aboutus/', 'seeseehome.views.aboutus', name='aboutus'),
 
-                       #   ckeditor set
-                       url(r'^ckeditor/', include('ckeditor.urls')),
+    #   users' urls
+    url(r'^', include('users.urls', namespace='users')),
 
-                       #   users' urls
-                       url(r'^', include('users.urls', namespace='users')),
+    #   boards' urls
+    url(r'^', include('boards.urls', namespace='boards')),
 
-                       #   boards' urls
-                       url(r'^', include('boards.urls', namespace='boards')),
+    #   linkboard' urls
+    url(r'^', include('linkboard.urls', namespace='linkboard')),
 
-                       #   linkboard' urls
-                       url(r'^', include('linkboard.urls', namespace='linkboard')),
-
-
-                       )
+    #   Django third party modules
+    url(r'^ckeditor/', include('ckeditor.urls')),
+    url(r'^grappelli/', include('grappelli.urls')),
+    )
 
 if settings.MEDIA_ENABLED:
     urlpatterns += patterns("",
