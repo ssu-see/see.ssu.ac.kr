@@ -34,12 +34,9 @@ SECRET_KEY = 't6g+nq2ba%na%(fxbm%ino##c@4+pn&+68j5spm+!nu2e)*6^b'
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-#ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '220.149.86.220', 'see.ssu.ac.kr', '0.0.0.0']
-#ALLOWED_HOSTS = ['*']
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,14 +44,29 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #   Custom apps
+
+    # Apps
     'users',
     'boards',
     'linkboard',
 
-    #   Django Packages
+    # Django Packages
     'ckeditor',
     'multiselectfield',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    # Django Default
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+
+    # Custom context processors
+    'seeseehome.context_processors.board_list',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -97,7 +109,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'ko-kr'
 
-#TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
