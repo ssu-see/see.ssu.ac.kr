@@ -10,28 +10,24 @@ except:
 
 urlpatterns = patterns(
     '',
-    #   admin page
+    # admin page
     url(r'^' + ADMIN_URL + '/', include(admin.site.urls), name="admin"),
 
-    #   main page
+    # main page
     url(r'^$', 'seeseehome.views.home', name='home'),
 
-    #   about us
+    # about us
     url(r'^aboutus/', 'seeseehome.views.aboutus', name='aboutus'),
 
-    #   users' urls
+    # Django Apps
     url(r'^', include('users.urls', namespace='users')),
-
-    #   boards' urls
     url(r'^', include('boards.urls', namespace='boards')),
-
-    #   linkboard' urls
     url(r'^', include('linkboard.urls', namespace='linkboard')),
 
     #   Django third party modules
     url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^grappelli/', include('grappelli.urls')),
-    )
+)
 
 if settings.MEDIA_ENABLED:
     urlpatterns += patterns("",
