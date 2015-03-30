@@ -1,23 +1,18 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, request, Http404
+from django.http import HttpResponseRedirect, Http404
 from seeseehome import msg
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from linkboard.models import LinkPost
-from users.models import User
-from boards.models import Board
 from django.core.validators import URLValidator
 from boards import views
 
 
 @login_required
 def linkpost(request, **extra_fields):
-    #   writer
     writer = request.user
-#   does the writer have valid write permission?
 
     if not LinkPost.objects.is_valid_writeperm_to_linkpost(writer=writer):
         messages.error(request, msg.boards_write_error)
@@ -26,7 +21,6 @@ def linkpost(request, **extra_fields):
             reverse("linkboard:linkboardpage", args=(1,)))
 
     if request.method == 'POST':
-        #       url validator
         try:
             url = request.POST['url']
             urlvalidator = URLValidator()
@@ -43,7 +37,6 @@ def linkpost(request, **extra_fields):
             return HttpResponseRedirect(
                 reverse("linkboard:linkboardpage", args=(1,)))
 
-#       description validator
         try:
             description = request.POST['description']
             LinkPost.objects.validate_description(description)
@@ -56,8 +49,8 @@ def linkpost(request, **extra_fields):
                 request,
                 msg.boards_linkpost_description_at_most_255
             )
-#       post save
-        if not 'post_id' in extra_fields:
+
+        if 'post_id' not in extra_fields:
             #           create link post
             LinkPost.objects.create_linkpost(
                 writer=writer,
@@ -67,7 +60,7 @@ def linkpost(request, **extra_fields):
             messages.success(request, msg.linkboard_linkpost_success)
             return HttpResponseRedirect(
                 reverse("linkboard:linkboardpage", args=(1,)))
-#       If rewrite, no create, but update
+
         else:
             post_id = extra_fields['post_id']
             LinkPost.objects.update_linkpost(linkpost_id=post_id,
@@ -76,15 +69,13 @@ def linkpost(request, **extra_fields):
             return HttpResponseRedirect(
                 reverse("linkboard:linkboardpage", args=(1,)))
 
-    boardlist = Board.objects.all()
-    return render(request, "linkboard/linkpost.html", {'boardlist': boardlist})
+    return render(request, "linkboard/linkpost.html")
 
 
 @login_required
 def linkboardpage(request, page=1):
     posts = LinkPost.objects.all().order_by('-date_posted')
     posts_per_page = 10
-    boardlist = Board.objects.all()
 
     try:
         page = int(page)
@@ -98,7 +89,6 @@ def linkboardpage(request, page=1):
         return render(request, "linkboard/linkboardpage.html",
                       {
                           'posts': posts,
-                          'boardlist': boardlist,
                           'searchvalue': search_decription,
                           'top50': "Top 50 Search",
                       }
@@ -111,23 +101,9 @@ def linkboardpage(request, page=1):
             posts_per_page=10,
             page_num=page
         )
-    except Exception as e:
-        print(e)
+    except:
         raise Http404
 
-    """
-        return render(request, "linkboard/linkboardpage.html",
-                   {
-                       'posts' : custom_paginator['posts'],
-                       'paginator' :custom_paginator['paginator'],
-                       'has_next' : custom_paginator['has_next'],
-                       'has_previous' : custom_paginator['has_previous'],
-                       'next_page_num' : custom_paginator['next_page_num'],
-                       'previous_page_num' : custom_paginator['previous_page_num'],
-                       'boardlist' : boardlist,
-                   }
-               )
-    """
     return render(request, "linkboard/linkboardpage.html",
                   {
                       'post_base_index': (posts_per_page * (page - 1)),
@@ -143,7 +119,6 @@ def linkboardpage(request, page=1):
                       'previous_page_num': custom_paginator['previous_page_num'],
                       'next_10_page_num': custom_paginator['next_10_page_num'],
                       'previous_10_page_num': custom_paginator['previous_10_page_num'],
-                      'boardlist': boardlist,
                   })
 
 
@@ -153,8 +128,6 @@ def updatelinkpost(request, post_id):
     if request.method == 'POST':
         linkpost(request, post_id=post_id)
         return HttpResponseRedirect(reverse("linkboard:linkboardpage", args=(1,)))
-
-    boardlist = Board.objects.all()
 
     return render(request, "linkboard/updatelinkpost.html",
                   {'post': post})

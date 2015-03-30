@@ -62,9 +62,7 @@ def signin(request):
         if 'next' in request.GET:
             next = request.GET['next']
 
-        boardlist = Board.objects.all()
-        return render(request, "users/signin.html", {'next': next,
-                                                     'boardlist': boardlist})
+        return render(request, "users/signin.html", {'next': next})
 
         return render(request, "users/signin.html", {'next': next})
 
@@ -163,15 +161,12 @@ def signup(request):
         messages.info(request, msg.users_signup_success_info)
         return HttpResponseRedirect(reverse("users:signin"))
 
-    boardlist = Board.objects.all()
-    return render(request, "users/signup.html", {'boardlist': boardlist})
+    return render(request, "users/signup.html")
 
 
 @login_required
 def personalinfo(request):
-    boardlist = Board.objects.all()
-    return render(request, "users/personalinfo.html",
-                  {'boardlist': boardlist})
+    return render(request, "users/personalinfo.html")
 
 
 @login_required
@@ -251,9 +246,7 @@ def editpersonalinfo(request):
         messages.success(request, msg.users_editpersonalinfo_success)
         return HttpResponseRedirect(reverse("users:personalinfo"))
 
-    boardlist = Board.objects.all()
-    return render(request, "users/editpersonalinfo.html",
-                  {'boardlist': boardlist})
+    return render(request, "users/editpersonalinfo.html")
 
 
 @login_required
@@ -292,5 +285,4 @@ def editpassword(request):
         messages.info(request, msg.users_change_pwd_success_info)
         return HttpResponseRedirect(reverse("users:signin"))
 
-    boardlist = Board.objects.all()
-    return render(request, "users/editpwd.html", {'boardlist': boardlist})
+    return render(request, "users/editpwd.html")

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404
-from boards.models import *
+from boards.models import Board, AttachmentFile, Post, Comment
+from users.models import User
 from seeseehome import msg
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
@@ -41,8 +42,9 @@ def write(request, board_id, **extra_fields):
     if request.method == 'POST':
         is_valid_content = False
         is_notice = False
-#       subject
+
         subject = request.POST['subject']
+
         try:
             Post.objects.validate_subject(subject)
         except ValueError:
@@ -109,13 +111,11 @@ def write(request, board_id, **extra_fields):
 #           no need to HttpResponseRedirect, That is inplementeed in
 #           rewrite mothod
 
-    boardlist = Board.objects.all()
     ck_editor_form = CkEditorForm()
 
     return render(request,
                   "boards/write.html",
-                  {'boardlist': boardlist,
-                   'board': board,
+                  {'board': board,
                    'ckeditor_form': ck_editor_form})
 
 
@@ -130,11 +130,10 @@ def rewrite(request, board_id, post_id):
         return HttpResponseRedirect(reverse("boards:postpage",
                                             args=(board_id, post_id)))
 
-    boardlist = Board.objects.all()
     ck_editor_form = CkEditorForm({'content': post.content})
 
     return render(request, "boards/write.html",
-                  {'board': board, 'post': post, 'boardlist': boardlist, 'ckeditor_form': ck_editor_form})
+                  {'board': board, 'post': post, 'ckeditor_form': ck_editor_form})
 
 
 def postpage(request, board_id, post_id):
@@ -177,11 +176,10 @@ def postpage(request, board_id, post_id):
     commentlist = \
         Comment.objects.filter(post=post).order_by('date_commented')
 
-    boardlist = Board.objects.all()
     return render(request, "boards/postpage.html",
                   {
-                      'board': board, 'post': post, 'boardlist': boardlist,
-                      'commentlist': commentlist, 'attachments_count': post.attachments.count(),
+                      'board': board, 'post': post, 'commentlist': commentlist,
+                      'attachments_count': post.attachments.count(),
                   })
 
 
@@ -271,13 +269,11 @@ def boardpage(request, board_id, page=1):
                 posts = posts.filter(writer=writer)
 
         posts = posts[0:50]
-#       for board list of menu bar
-        boardlist = Board.objects.all()
+
         return render(request, "boards/boardpage.html",
                       {
                           'posts': posts,
                           'board': board,
-                          'boardlist': boardlist,
                           'searchvalue': search_post,
                           'top50': "Top 50 Search",
                       }
@@ -296,12 +292,9 @@ def boardpage(request, board_id, page=1):
     except:
         raise Http404
 
-#   for board list of menu bar
-    boardlist = Board.objects.all()
     return render(request, "boards/boardpage.html",
                   {
                       'board': board,
-                      'boardlist': boardlist,
                       'notices': notices,
                       'post_base_index': (posts_per_page * (page - 1)),
                       'posts': custom_paginator['posts'],
