@@ -38,6 +38,9 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '220.149.86.220', 'see.ssu.ac.kr', '0
 
 # Application definition
 INSTALLED_APPS = (
+    # Custom admin, must set before django.contrib.admin
+    'grappelli',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,6 +67,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request",
 
     # Custom context processors
     'seeseehome.context_processors.board_list',
@@ -118,16 +122,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # This setting defines the additional locations
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'assets'),
 )
 
@@ -161,3 +162,6 @@ CKEDITOR_CONFIGS = {
 
 # specify the custom model as the default user model
 AUTH_USER_MODEL = 'users.User'
+
+# Grapelli admin settings
+GRAPPELLI_ADMIN_TITLE = 'Soongsil Electronic Exhibition'
