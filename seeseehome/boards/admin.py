@@ -5,12 +5,12 @@ from boards.forms import BoardForm
 
 class PostInline(admin.TabularInline):
     model = Post
+    classes = ('grp-collapse grp-closed',)
 
     def has_add_permission(self, request):
         return False
 
-    list_display = ('subject', 'writer', 'date_posted',)
-    exclude = ('writer', 'subject', 'content',)
+    exclude = ('content',)
     search_fields = ['subject']
 
 
