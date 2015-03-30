@@ -47,4 +47,6 @@ Thumbs.db
 .env
 
 # Custom admin style static files
-grappelli/
+**/static/grappelli/
+**/static/debug_toolbar/
+**/static/django_extensions/
