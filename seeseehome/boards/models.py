@@ -1,11 +1,10 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import hashlib
 import os
 import shutil
 from seeseehome.settings import BASE_DIR
 from django.db import models
 from users.models import User
-#from posts.models import Post
 from seeseehome import msg
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from multiselectfield import MultiSelectField
@@ -169,6 +168,9 @@ class AttachmentFile(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True,
                                      help_text="Uploaded time")
 
+    def __unicode__(self):
+        return self.file_name
+
 
 class PostManager(models.Manager):
 
@@ -304,9 +306,8 @@ class Post(models.Model):
         help_text="counting of watched",
         default=0,
     )
-    attachments = models.ManyToManyField(AttachmentFile)
+    attachments = models.ManyToManyField(AttachmentFile, blank=True)
 
-#   for showing post information instead of object itself
     def __unicode__(self):
         return ('Writer: ' + self.writer.username + ", " +
                 "Subject: " + self.subject)
