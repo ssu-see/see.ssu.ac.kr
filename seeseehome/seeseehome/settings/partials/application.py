@@ -7,7 +7,8 @@ warnings.filterwarnings(
     RuntimeWarning, r'django\.db\.models\.fields')
 
 # BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+BASE_DIR = os.path.abspath(os.path.dirname(__file__) + "../../../../")
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
 SECRET_KEY = 't6g+nq2ba%na%(fxbm%ino##c@4+pn&+68j5spm+!nu2e)*6^b'
