@@ -1,11 +1,11 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 import hashlib
 import os
 import shutil
-from seeseehome.settings import BASE_DIR
+from seeseehome.settings.partials.application import BASE_DIR
 from django.db import models
 from users.models import User
-#from posts.models import Post
 from seeseehome import msg
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from multiselectfield import MultiSelectField
