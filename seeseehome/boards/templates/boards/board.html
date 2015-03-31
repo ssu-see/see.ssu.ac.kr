@@ -18,14 +18,13 @@
           </tr>
         </thead>
         <tbody>
-          {% if posts %}
-            {% for post in posts %}
+            {% for post, index in mixed_posts %}
               <tr>
                 <td class="number">
                    {% if post.is_notice %}
                      <div class="notice-block">Notice</div>
                    {% else %}
-                     <div>{{ post.pk }}</div>
+                     <div>{{ index }}</div>
                    {% endif %}
                 </td>
                 <td class="subject">
@@ -41,7 +40,6 @@
                 <td class="hits">{{ post.hit_count }}</td>
               </tr>
             {% endfor %}
-          {% endif %}
         </tbody>
       </table>
     </div>
