@@ -120,7 +120,7 @@
           <div class="notice-block">Notice</div>
         {% endif %}
         <span class="title">{{ post.subject }}</span>
-        <span class="board-name"><span class="splitter"></span><a href="{% url 'boards:boardpage' board.id 1 %}" class="board-name">{{ board.boardname }}</a></span>
+        <span class="board-name"><span class="splitter"></span><a href="{% url 'boards:board_post_list' board.id 1 %}" class="board-name">{{ board.boardname }}</a></span>
       </div>
       <div class="fr">
         {% if post.writer == user or user.is_superuser %}

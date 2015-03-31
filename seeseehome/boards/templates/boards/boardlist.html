@@ -3,7 +3,7 @@
   {% if boardlist %}
     {% for board in boardlist %}
     {# board page of <a> tag is linked to the first page of the target board #}
-    <a href="{% url 'boards:boardpage' board.id 1 %}">{{ board.boardname }}</a><br>
+    <a href="{% url 'boards:board_post_list' board.id 1 %}">{{ board.boardname }}</a><br>
     {% endfor %}  
     <a href="{% url 'home' %}">Main</a><br>
   {% endif %}
