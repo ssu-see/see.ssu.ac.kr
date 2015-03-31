@@ -10,8 +10,6 @@ class PostInline(admin.TabularInline):
     def has_add_permission(self, request):
         return False
 
-    fields = ('attachments.through',)
-
     exclude = ('content', 'attachments')
     search_fields = ['subject']
 
