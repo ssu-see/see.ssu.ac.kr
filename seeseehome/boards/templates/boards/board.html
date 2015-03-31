@@ -1,0 +1,84 @@
+{% extends "template.html" %}
+{% block content %}
+  {% include 'template_menu.html' %}
+{{ page_obj.paginator.num_pages }}
+<div class="container">
+  <h3 class="page-header">{{ board.boardname }}</h3>
+  <div class="table-responsive">
+    <table class="table table-striped board-table">
+      <thead>
+        <tr>
+          <th class="number">no</th>
+          <th class="subject">subject</th>
+          <th class="writer">writer</th>
+          <th class="date">date</th>
+          <th class="hits">hits</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if posts %}
+          {% for post in posts %}
+            <tr>
+              <td class="number">
+                 {% if post.is_notice %}
+                   <div class="notice-block">Notice</div>
+                 {% else %}
+                   <div>{{ post.pk }}</div>
+                 {% endif %}
+              </td>
+              <td class="subject">
+                <a href="{% url 'boards:postpage' board.id post.id %}">
+                  {{ post.subject }}
+                  {% if post.comment_set.count > 0 %}
+                    <span class="num_of_comments">[{{ post.comment_set.count }}]</span>
+                  {% endif %}
+                </a>
+              </td>
+              <td class="writer">{{ post.writer.username }}</td>
+              <td class="date">{{ post.date_posted | date:"Y.m.d" }}</td>
+              <td class="hits">{{ post.hit_count }}</td>
+            </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  <div class="clearfix">
+    <a href="{% url 'boards:write' board.id %}" class="btn btn-default fr">
+      <span class="glyphicon glyphicon-pencil"></span>&nbsp;Write
+    </a>
+  </div>
+</div>
+  {% for page in page_range %}
+    <a href="{% url 'boards:board_post_list' board.pk page %}">{{ page }}</a>
+  {% endfor %}
+ 
+      <div class="text-center board-footer-list">
+        <div class="btn-toolbar inline-block" role="toolbar">
+
+          <div class="btn-group btn-group-sm" role="group">
+              <a href="{% url 'boards:board_post_list' board.id prev_page %}" 
+              class="btn btn-default {% if prev_page == 0 %} disabled {% endif %}">
+                Prev
+              </a>
+          </div>
+
+          <div class="btn-group btn-group-sm" role="group">
+            {% for page in page_range %}
+              <a href="{% url 'boards:board_post_list' board.id page %}" 
+              class="btn btn-default {% if page == current_page %} active {% endif %}"}>
+                {{ page }}
+              </a>
+            {% endfor %}
+          </div>
+
+          <div class="btn-group btn-group-sm" role="group">
+              <a class="btn btn-default" href="{% url 'boards:board_post_list' board.id next_page %}" 
+                {% if next_page == 0 %} disabled {% endif %}}>
+                Next
+              </a>
+          </div>
+
+        </div>
+      </div>
+{% endblock %}
