@@ -4,6 +4,7 @@ __pycache__/
 
 # No vi swapfile
 *.swp
+*.swo
 
 # C extensions
 *.so
