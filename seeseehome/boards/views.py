@@ -4,7 +4,6 @@ from boards.models import Board, AttachmentFile, Post, Comment
 from users.models import User
 from seeseehome import msg
 from django.core.exceptions import ValidationError
-# , ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -47,7 +46,6 @@ def write(request, board_id, **extra_fields):
             return HttpResponseRedirect(reverse("boards:write",
                                                 args=(board_id)))
 
-#       content
         if 'content' in request.POST:
             content = request.POST['content']
             try:
@@ -60,15 +58,13 @@ def write(request, board_id, **extra_fields):
             else:
                 is_valid_content = True
 
-#       is_notice
         if 'is_notice' in request.POST:
             is_notice = request.POST['is_notice']
 
-#       post save
         if 'post_id' not in extra_fields:
             post = Post.objects.create_post(board=board, subject=subject,
                                             writer=writer, is_notice=is_notice)
-#           content save
+
             if is_valid_content:
                 Post.objects.update_post(post.id, content=content)
 
@@ -80,7 +76,8 @@ def write(request, board_id, **extra_fields):
 
             return HttpResponseRedirect(reverse("boards:postpage",
                                                 args=(board_id, post.id)))
-#       If rewrite, no create, but update
+
+        # If rewrite, no create, but update
         else:
             post_id = extra_fields['post_id']
             Post.objects.update_post(post_id, subject=subject)
@@ -97,8 +94,6 @@ def write(request, board_id, **extra_fields):
 
             messages.success(request, msg.boards_write_success)
             messages.info(request, msg.boards_write_success_info)
-#           no need to HttpResponseRedirect, That is inplementeed in
-#           rewrite mothod
 
     ck_editor_form = CkEditorForm()
 
@@ -111,7 +106,6 @@ def write(request, board_id, **extra_fields):
 @login_required
 def rewrite(request, board_id, post_id):
     board = Board.objects.get_board(board_id)
-#    boardposts = BoardPosts.objects.filter(board=board)
     post = Post.objects.get_post(post_id)
 
     if request.method == 'POST':
@@ -132,7 +126,6 @@ def postpage(request, board_id, post_id):
     if not post.board == board:
         raise Http404
 
-#   reader : for is_valid_readperm
     reader = User.objects.get_user(request.user.id)
     if check_readperm_with_message(request, board_id) is False:
         return HttpResponseRedirect(reverse("home"))
@@ -250,13 +243,22 @@ class BoardPostList(ListView):
             context['current_page'] / 10 * 10 + 1
         context['end_page'] = last_page > context['start_page'] + 9 and \
             context['start_page'] + 9 or last_page
-
-        context['page_range'] = range(context['start_page'], context['end_page'] + 1)
+        context['page_range'] = range(
+            context['start_page'], context['end_page'] + 1
+        )
 
         context['next_page'] = last_page > context['end_page'] and \
             context['end_page'] + 1 or 0
         context['prev_page'] = context['start_page'] - 10 > 0 and \
             context['start_page'] - 1 or 0
+
+        last_index = context['page_obj'].paginator.count
+        start_index = context['page_obj'].start_index()
+        end_index = context['page_obj'].end_index()
+        indices = list(reversed(range(
+            last_index - end_index + 1, last_index - start_index + 2))
+        )
+        context['mixed_posts'] = zip(context['posts'], indices)
 
         return context
 
