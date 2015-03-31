@@ -10,7 +10,7 @@ class PostInline(admin.TabularInline):
     def has_add_permission(self, request):
         return False
 
-    exclude = ('content',)
+    exclude = ('content', 'attachments')
     search_fields = ['subject']
 
 

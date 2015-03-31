@@ -21,7 +21,7 @@
                         {% if boardlist %}
                           {% for board in boardlist %}
                             <li>
-                              <a href="{% url 'boards:boardpage' board.id 1 %}" class="clearfix">
+                              <a href="{% url 'boards:board_post_list' board.id 1 %}" class="clearfix">
                                 <span class="fl">{{ board.boardname }}</span>
                                 {# {{ board | posts_last_3_days }}&nbsp;</span> #}
                                 {% if board|posts_last_3_days %}

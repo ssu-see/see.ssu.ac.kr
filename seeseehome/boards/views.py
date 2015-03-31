@@ -3,28 +3,17 @@ from django.http import HttpResponseRedirect, Http404
 from boards.models import Board, AttachmentFile, Post, Comment
 from users.models import User
 from seeseehome import msg
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
+# , ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from ckeditor_form import CkEditorForm
 
+from django.views.generic.list import ListView
 
-def check_invalid_readperm_with_message(request, board, reader):
-    #   Does the writer has valid write permission?
-    if reader is None:
-        if '0' not in board.readperm:
-            messages.error(request, msg.boards_read_error)
-            messages.info(request, msg.boards_read_error_info)
-            return False
-    elif not Board.objects.is_valid_readperm(
-            board=board, reader=reader):
-        messages.error(request, msg.boards_read_error)
-        messages.info(request, msg.boards_read_error_info)
-        return False
-
-    return True
+from boards.utils.permission_handling import check_readperm_with_message
 
 
 @login_required
@@ -36,7 +25,7 @@ def write(request, board_id, **extra_fields):
             board=board, writer=writer):
         messages.error(request, msg.boards_write_error)
         messages.info(request, msg.boards_writer_perm_error)
-        return HttpResponseRedirect(reverse("boards:boardpage",
+        return HttpResponseRedirect(reverse("boards:board_post_list",
                                             args=(board_id, 1)))
 
     if request.method == 'POST':
@@ -145,7 +134,7 @@ def postpage(request, board_id, post_id):
 
 #   reader : for is_valid_readperm
     reader = User.objects.get_user(request.user.id)
-    if check_invalid_readperm_with_message(request, board, reader) is False:
+    if check_readperm_with_message(request, board_id) is False:
         return HttpResponseRedirect(reverse("home"))
 
     if reader is None:
@@ -231,86 +220,45 @@ def pagination(posts, posts_per_page=10, page_num=1):
     return custom_paginator
 
 
-def boardpage(request, board_id, page=1):
-    board = Board.objects.get_board(board_id)
+class BoardPostList(ListView):
+    template_name = "boards/board.html"
 
-    reader = User.objects.get_user(request.user.id)
-    posts_per_page = 10
+    model = Post
+    context_object_name = 'posts'
 
-    try:
-        page = int(page)
-    except:
-        raise Http404
+    paginate_by = 10
 
-    if check_invalid_readperm_with_message(request, board, reader) is False:
-        return HttpResponseRedirect(reverse("home"))
+    def dispatch(self, request, *args, **kwargs):
+        if check_readperm_with_message(request, self.kwargs['pk']) is False:
+            return HttpResponseRedirect(reverse("home"))
 
-    posts = Post.objects.filter(board=board).order_by("-date_posted")
+        return super(BoardPostList, self).dispatch(request, *args, **kwargs)
 
-    if request.method == "POST":
-        search_post = request.POST['search_post']
+    def get_queryset(self, **kwargs):
+        queryset = super(BoardPostList, self).get_queryset(**kwargs)
+        return queryset.filter(board=Board.objects.get(pk=self.kwargs['pk']))
 
-        if request.POST['select_post'] == "subject":
-            posts = posts.filter(subject__icontains=search_post)
-        elif request.POST['select_post'] == "content":
-            posts = posts.filter(content__icontains=search_post)
-        elif request.POST['select_post'] == "subject + content":
-            posts = posts.filter(subject__icontains=search_post) | \
-                posts.filter(content__icontains=search_post)
-        elif request.POST['select_post'] == "writer":
-            try:
-                writer = User.objects.get(username=search_post)
-            except ObjectDoesNotExist:
-                messages.error(request, msg.boards_search_post_error)
-                messages.info(request, msg.users_username_does_not_exist)
-                return HttpResponseRedirect(reverse("boards:boardpage",
-                                                    args=(board.id, 1)))
-            else:
-                posts = posts.filter(writer=writer)
+    def get_context_data(self, **kwargs):
+        context = super(BoardPostList, self).get_context_data(**kwargs)
 
-        posts = posts[0:50]
+        context['board'] = Board.objects.get(pk=self.kwargs['pk'])
 
-        return render(request, "boards/boardpage.html",
-                      {
-                          'posts': posts,
-                          'board': board,
-                          'searchvalue': search_post,
-                          'top50': "Top 50 Search",
-                      }
-                      )
+        context['current_page'] = context['page_obj'].number
+        last_page = context['page_obj'].paginator.num_pages
+        context['start_page'] = context['current_page'] % 10 == 0 and \
+            (context['current_page'] / 10 - 1) * 10 + 1 or \
+            context['current_page'] / 10 * 10 + 1
+        context['end_page'] = last_page > context['start_page'] + 9 and \
+            context['start_page'] + 9 or last_page
 
-    """
-    All posts are listed in order by posted date.
-    But First of all, notice post will be listed.
-    """
-    notices = posts.filter(is_notice=1)
-    posts = posts.filter(is_notice=0)
+        context['page_range'] = range(context['start_page'], context['end_page'] + 1)
 
-#   if page does not exist, then raise 404
-    try:
-        custom_paginator = pagination(posts=posts, posts_per_page=posts_per_page, page_num=page)
-    except:
-        raise Http404
+        context['next_page'] = last_page > context['end_page'] and \
+            context['end_page'] + 1 or 0
+        context['prev_page'] = context['start_page'] - 10 > 0 and \
+            context['start_page'] - 1 or 0
 
-    return render(request, "boards/boardpage.html",
-                  {
-                      'board': board,
-                      'notices': notices,
-                      'post_base_index': (posts_per_page * (page - 1)),
-                      'posts': custom_paginator['posts'],
-                      'paginator': custom_paginator['paginator'],
-                      'has_next': custom_paginator['has_next'],
-                      'has_next_10': custom_paginator['has_next_10'],
-                      'current_page_num': page,
-                      'has_previous': custom_paginator['has_previous'],
-                      'has_previous_10': custom_paginator['has_previous_10'],
-                      'page_range': custom_paginator['page_range'],
-                      'next_page_num': custom_paginator['next_page_num'],
-                      'previous_page_num': custom_paginator['previous_page_num'],
-                      'next_10_page_num': custom_paginator['next_10_page_num'],
-                      'previous_10_page_num': custom_paginator['previous_10_page_num'],
-                  }
-                  )
+        return context
 
 
 @login_required
@@ -336,5 +284,5 @@ def deletepost(request, board_id, post_id):
     else:
         post.delete()
 
-    return HttpResponseRedirect(reverse("boards:boardpage",
+    return HttpResponseRedirect(reverse("boards:board_post_list",
                                         args=(board_id, 1)))

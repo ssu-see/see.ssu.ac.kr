@@ -76,7 +76,7 @@
           </div>
           <div class="btn-group btn-group-sm" role="group">
             {% for page_num in page_range %}
-            <a href="{% url 'boards:boardpage' board.id page_num %}" class="btn btn-default {%if current_page_num == page_num%}active{%endif%}">{{page_num}}</a>
+            <a href="{% url 'boards:boardpage' board.id page_num %}" class="btn btn-default" {%if current_page_num == page_num%}active{%endif%}>{{page_num}}</a>
             {% endfor %}
           </div>
             <div class="btn-group btn-group-sm" role="group">
