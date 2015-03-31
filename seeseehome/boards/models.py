@@ -313,6 +313,9 @@ class Post(models.Model):
         return ('Writer: ' + self.writer.username + ", " +
                 "Subject: " + self.subject)
 
+    class Meta:
+        ordering = ['-is_notice', '-date_posted']
+
 
 class CommentManager(models.Manager):
     # CREATE
