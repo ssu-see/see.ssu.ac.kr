@@ -38,20 +38,12 @@ class BoardManager(models.Manager):
             raise ValidationError(msg.boards_name_at_most_30)
         return True
 
-    def is_valid_readperm(self, board, reader):
-        return bool(str(board.readperm).find(reader.userperm) >= 1)
-
-
-##########
-# RETRIEVE
     def get_board(self, id):
         try:
             return Board.objects.get(pk=id)
         except Board.DoesNotExist:
             return None
 
-##########
-# UPDATE : This is only applied in admin page.
     def update_board(self, id, **extra_fields):
         board = Board.objects.get_board(id)
         if 'boardname' in extra_fields:
@@ -61,8 +53,6 @@ class BoardManager(models.Manager):
             raise ValueError()
         board.save(using=self._db)
 
-##########
-# DELETE
     def delete_board(self, id):
         board = Board.objects.get(id=id)
         board.delete()
@@ -104,9 +94,8 @@ class Board(models.Model):
         max_choices = 5,
     )
 
-#   for showing user name instead of object itself in admin page
     def __unicode__(self):
-        return 'Board name: ' + self.boardname
+        return self.boardname
 
 
 class AttachmentFileManager(models.Manager):
