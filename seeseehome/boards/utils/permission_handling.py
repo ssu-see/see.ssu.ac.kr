@@ -10,7 +10,7 @@ def _is_valid_readperm(board, user):
 def check_readperm_with_message(request, board_pk):
     board = Board.objects.get(pk=board_pk)
 
-    if request.user is None:
+    if request.user.is_anonymous() is True:
         if '0' not in board.readperm:
             messages.error(request, msg.boards_read_error)
             messages.info(request, msg.boards_read_error_info)
