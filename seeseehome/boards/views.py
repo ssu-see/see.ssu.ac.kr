@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from ckeditor_form import CkEditorForm
+from django.views.generic.list import ListView
 
 
 def check_invalid_readperm_with_message(request, board, reader):
@@ -229,6 +230,41 @@ def pagination(posts, posts_per_page=10, page_num=1):
         'previous_page_num': previous_page_num,
     }
     return custom_paginator
+
+
+class BoardPostList(ListView):
+    template_name = "boards/board.html"
+
+    model = Post
+    context_object_name = 'posts'
+
+    paginate_by = 1
+
+    def get_queryset(self, **kwargs):
+        queryset = super(BoardPostList, self).get_queryset(**kwargs)
+        return queryset.filter(board=Board.objects.get(pk=self.kwargs['pk']))
+
+    def get_context_data(self, **kwargs):
+        context = super(BoardPostList, self).get_context_data(**kwargs)
+
+        context['board'] = Board.objects.get(pk=self.kwargs['pk'])
+
+        context['current_page'] = context['page_obj'].number
+        last_page = context['page_obj'].paginator.num_pages
+        context['start_page'] = context['current_page'] % 10 == 0 and \
+            (context['current_page'] / 10 - 1) * 10 + 1 or \
+            context['current_page'] / 10 * 10 + 1
+        context['end_page'] = last_page > context['start_page'] + 9 and \
+            context['start_page'] + 9 or last_page
+
+        context['page_range'] = range(context['start_page'], context['end_page']+1)
+
+        context['next_page'] = last_page > context['end_page'] and \
+            context['end_page'] + 1 or 0
+        context['prev_page'] = context['start_page'] - 10 > 0 and \
+            context['start_page'] - 1 or 0
+
+        return context
 
 
 def boardpage(request, board_id, page=1):
