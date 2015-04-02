@@ -50,3 +50,6 @@ Thumbs.db
 **/static/grappelli/
 **/static/debug_toolbar/
 **/static/django_extensions/
+
+# Local development settings
+**/settings/partials/development.py
