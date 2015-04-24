@@ -1,9 +1,7 @@
-{% extends "base.html" %}
+{% extends "template.html" %}
 {% block content %}
-  {% include 'menu.html' %}
-  <div style="padding:0px 15px;">
-    <h2>Edit personal info</h2>
-  </div>
+  {% include "template_menu.html" %}
+  <h2>Edit personal info</h2>
   <form method="POST">{% csrf_token %}
     <div class="col-xs-4">
       <input name="username" class="form-control" type="text" placeholder="Enter User Name" maxlength="30" value="{{user.username}}" autofocus>

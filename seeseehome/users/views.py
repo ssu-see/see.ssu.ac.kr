@@ -8,7 +8,6 @@ from django.core.validators import validate_email
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login as _login, logout as _logout
 from django.contrib.auth.decorators import login_required
-from boards.models import Board
 
 # I couldn't solve built-in authenticate problem yet
 # So I use custom authenticate(But It is almost same as built-in authenticate)
@@ -166,7 +165,7 @@ def signup(request):
 
 @login_required
 def personalinfo(request):
-    return render(request, "users/personalinfo.html")
+    return render(request, "users/my-page.html")
 
 
 @login_required
@@ -244,7 +243,7 @@ def editpersonalinfo(request):
                     contact_number=contact_number,
                 )
         messages.success(request, msg.users_editpersonalinfo_success)
-        return HttpResponseRedirect(reverse("users:personalinfo"))
+        return HttpResponseRedirect(reverse("users:mypage"))
 
     return render(request, "users/editpersonalinfo.html")
 
