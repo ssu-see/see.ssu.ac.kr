@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from ckeditor_form import CkEditorForm
 
 from django.views.generic.list import ListView
@@ -163,54 +162,6 @@ def postpage(request, board_id, post_id):
                       'board': board, 'post': post, 'commentlist': commentlist,
                       'attachments_count': post.attachments.count(),
                   })
-
-
-def pagination(posts, posts_per_page=10, page_num=1):
-    #   posts per page
-    start_pos = (page_num - 1) * posts_per_page
-    end_pos = start_pos + posts_per_page
-    posts_of_present_page = posts[start_pos: end_pos]
-
-    paginator = Paginator(posts, posts_per_page)
-    p = paginator.page(page_num)
-
-    has_next = p.has_next()
-    has_previous = p.has_previous()
-
-    if has_next:
-        next_page_num = p.next_page_number()
-    else:
-        next_page_num = page_num
-
-    if has_previous:
-        previous_page_num = p.previous_page_number()
-    else:
-        previous_page_num = page_num
-
-    next_10_page_num = page_num + 10 if page_num + 10 < paginator.num_pages else paginator.num_pages
-    previous_10_page_num = page_num - 10 if page_num - 10 > 1 else 1
-
-    page_range = paginator.page_range
-
-    if page_num % 10 == 0:
-        page_range = paginator.page_range[(int(page_num / 10) - 1) * 10: (int(page_num / 10) - 1) * 10 + 10]
-    else:
-        page_range = paginator.page_range[int(page_num / 10) * 10: int(page_num / 10) * 10 + 10]
-
-    custom_paginator = {
-        'posts': posts_of_present_page,
-        'paginator': p,
-        'page_range': page_range,
-        'has_next': has_next,
-        'has_next_10': paginator.num_pages >= page_num + 10,
-        'has_previous': has_previous,
-        'has_previous_10': 0 < page_num - 10,
-        'next_10_page_num': next_10_page_num,
-        'next_page_num': next_page_num,
-        'previous_10_page_num': previous_10_page_num,
-        'previous_page_num': previous_page_num,
-    }
-    return custom_paginator
 
 
 class BoardPostList(ListView):
