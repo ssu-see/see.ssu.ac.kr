@@ -79,7 +79,7 @@ class LinkBoard(ListView):
     model = LinkPost
     context_object_name = 'posts'
 
-    paginate_by = 2
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super(LinkBoard, self).get_context_data(**kwargs)
