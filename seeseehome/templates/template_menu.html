@@ -39,7 +39,7 @@
                     <li><a href="{% url 'admin:index' %}">Admin</a></li> 
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'users:personalinfo' %}">Account</a></li>
+                    <li><a href="{% url 'users:mypage' %}">My page</a></li>
                     <li><a href="{% url 'users:logout' %}">Log out</a></li>
                 {% else %}
                     <li><a href="{% url 'users:signin' %}">Sign in</a></li>
