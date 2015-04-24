@@ -1,7 +1,7 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from django.test import TestCase
 from boards.models import Board, Post, Comment
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ValidationError
 from seeseehome import testdata
 from users.models import User
 
@@ -65,14 +65,14 @@ class CommentManagerTestCase(TestCase):
         )
 
     def test_create_comment_with_user_who_does_not_have_write_perm(self):
-        self.board.writeperm = testdata.perm_member
+        self.board.commentperm = testdata.perm_member
         self.assertRaises(
             ValidationError,
             Comment.objects.create_comment,
             writer=self.user,
             board=self.board,
             post=self.post,
-            comment="",
+            comment="comment should not be blank",
         )
 
     def test_update_comment(self):
