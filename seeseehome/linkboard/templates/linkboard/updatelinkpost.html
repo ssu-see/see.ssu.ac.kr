@@ -1,11 +1,11 @@
 {% extends "template.html" %}
 {% block content %}
-{% include "menu.html" %}
+{% include "template_menu.html" %}
 <div class="col-sm-3 col-md-2 sidebar">
   <ul class="nav nav-sidebar">
   </ul>
   <ul class="nav nav-sidebar">
-    <li class="active"><a href="{% url 'linkboard:linkboardpage' 1 %}">Go back to board</a></li>
+    <li class="active"><a href="{% url 'linkboard:linkboard' 1 %}">Go back to board</a></li>
   </ul>
 </div>
 <div style="padding:41px 215px;">
@@ -22,6 +22,3 @@
   </form>
 </div>
 {% endblock %}
-
-
-

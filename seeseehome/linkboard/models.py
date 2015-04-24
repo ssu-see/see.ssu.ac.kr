@@ -81,3 +81,6 @@ class LinkPost(models.Model):
 #   for showing description instead of object itself
     def __unicode__(self):
         return self.description
+
+    class Meta:
+        ordering = ['-date_posted']
