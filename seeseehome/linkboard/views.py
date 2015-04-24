@@ -86,7 +86,6 @@ class LinkBoard(ListView):
         context = super(LinkBoard, self).get_context_data(**kwargs)
 
         context['current_page'] = context['page_obj'].number
-        print context['page_obj']
         last_page = context['page_obj'].paginator.num_pages
         context['start_page'] = context['current_page'] % 10 == 0 and \
             (context['current_page'] / 10 - 1) * 10 + 1 or \
