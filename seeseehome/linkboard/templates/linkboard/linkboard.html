@@ -1,0 +1,75 @@
+{% extends "template.html" %}
+{% block content %}
+  {% include "template_menu.html" %}
+
+  <div class="container">
+    <h3 class="page-header">Link Board</h3>
+    <div class="table-responsive">
+      <table class="table table-striped board-table">
+        <thead>
+          <tr>
+            <th class="number">no</th>
+            <th class="description">subject</th>
+            <th class="writer">writer</th>
+            <th class="edit">edit</th>
+            <th class="delete">delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for post, index in mixed_posts %}
+            <tr>
+              <td class="number">
+                 <div>{{ index }}</div>
+              </td>
+              <td class="description">
+                <a href="{{ post.url }}" target="_blank">{{ post.description }}</a>
+              </td>
+              <td class="writer">{{ post.writer.username }}</td>
+
+              {% if post.writer == user %}
+                <td class="edit">
+                  <button type="button" class="btn btn-default btn-xs"><a href="{% url 'linkboard:updatelinkpost' post.id %}">Edit</a></button>
+                </td>
+                <td class="delete">
+                  <button type="button" class="btn btn-danger btn-xs"><a href="{% url 'linkboard:deletelinkpost' post.id %}">Delete</a></button>
+                </td>
+
+              {% else %}
+                <td class="edit">
+                <td class="delete">
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    <div class="clearfix">
+      <a href="{% url 'linkboard:linkpost' %}" class="btn btn-default fr">
+        <span class="glyphicon glyphicon-pencil"></span>&nbsp;Write
+      </a>
+    </div>
+    <div class="text-center board-footer-list">
+      <div class="btn-toolbar inline-block" role="toolbar">
+        <div class="btn-group btn-group-sm" role="group">
+          <a href="{% url 'linkboard:linkboard' prev_page %}"
+            class="btn btn-default {% if prev_page == 0 %} disabled {% endif %}">
+            Prev
+          </a>
+        </div>
+        <div class="btn-group btn-group-sm" role="group">
+          {% for page in page_range %}
+            <a href="{% url 'linkboard:linkboard' page %}"
+            class="btn btn-default {% if page == current_page %} active {% endif %}"}>
+              {{ page }}
+            </a>
+          {% endfor %}
+        </div>
+        <div class="btn-group btn-group-sm" role="group">
+            <a class="btn btn-default" href="{% url 'linkboard:linkboard' next_page %}"
+              {% if next_page == 0 %} disabled {% endif %}}>
+              Next
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
