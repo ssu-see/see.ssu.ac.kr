@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from seeseehome import msg
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from linkboard.models import LinkPost
 from django.core.validators import URLValidator
-from boards import views
 
 from django.views.generic.list import ListView
 
@@ -110,56 +109,6 @@ class LinkBoard(ListView):
         context['mixed_posts'] = zip(context['posts'], indices)
 
         return context
-
-
-@login_required
-def linkboard(request, page=1):
-    posts = LinkPost.objects.all().order_by('-date_posted')
-    posts_per_page = 10
-
-    try:
-        page = int(page)
-    except:
-        raise Http404
-
-    if request.method == "POST":
-        search_decription = request.POST['search_description']
-        posts = posts.filter(description__icontains=search_decription)
-        posts = posts[0:50]
-        return render(request, "linkboard/linkboard.html",
-                      {
-                          'posts': posts,
-                          'searchvalue': search_decription,
-                          'top50': "Top 50 Search",
-                      }
-                      )
-
-#   if the page does not exist, raise 404
-    try:
-        custom_paginator = views.pagination(
-            posts=posts,
-            posts_per_page=10,
-            page_num=page
-        )
-    except:
-        raise Http404
-
-    return render(request, "linkboard/linkboard.html",
-                  {
-                      'post_base_index': (posts_per_page * (page - 1)),
-                      'posts': custom_paginator['posts'],
-                      'paginator': custom_paginator['paginator'],
-                      'has_next': custom_paginator['has_next'],
-                      'has_next_10': custom_paginator['has_next_10'],
-                      'current_page_num': page,
-                      'has_previous': custom_paginator['has_previous'],
-                      'has_previous_10': custom_paginator['has_previous_10'],
-                      'page_range': custom_paginator['page_range'],
-                      'next_page_num': custom_paginator['next_page_num'],
-                      'previous_page_num': custom_paginator['previous_page_num'],
-                      'next_10_page_num': custom_paginator['next_10_page_num'],
-                      'previous_10_page_num': custom_paginator['previous_10_page_num'],
-                  })
 
 
 @login_required
