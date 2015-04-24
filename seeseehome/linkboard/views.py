@@ -9,6 +9,8 @@ from linkboard.models import LinkPost
 from django.core.validators import URLValidator
 from boards import views
 
+from django.views.generic.list import ListView
+
 
 @login_required
 def linkpost(request, **extra_fields):
@@ -18,7 +20,7 @@ def linkpost(request, **extra_fields):
         messages.error(request, msg.boards_write_error)
         messages.info(request, msg.boards_writer_perm_error)
         return HttpResponseRedirect(
-            reverse("linkboard:linkboardpage", args=(1,)))
+            reverse("linkboard:linkboard"))
 
     if request.method == 'POST':
         try:
@@ -29,13 +31,13 @@ def linkpost(request, **extra_fields):
             messages.error(request, msg.linkboard_linkpost_error)
             messages.info(request, msg.linkboard_linkpost_invalid)
             return HttpResponseRedirect(
-                reverse("linkboard:linkboardpage", args=(1,)))
+                reverse("linkboard:linkboard"))
 
         except UnicodeError:
             messages.error(request, msg.linkboard_linkpost_error)
             messages.info(request, msg.linkboard_linkpost_unicode_error)
             return HttpResponseRedirect(
-                reverse("linkboard:linkboardpage", args=(1,)))
+                reverse("linkboard:linkboard"))
 
         try:
             description = request.POST['description']
@@ -59,7 +61,7 @@ def linkpost(request, **extra_fields):
             )
             messages.success(request, msg.linkboard_linkpost_success)
             return HttpResponseRedirect(
-                reverse("linkboard:linkboardpage", args=(1,)))
+                reverse("linkboard:linkboard"))
 
         else:
             post_id = extra_fields['post_id']
@@ -67,13 +69,52 @@ def linkpost(request, **extra_fields):
                                              url=url, description=description)
             messages.success(request, msg.linkboard_linkpost_success)
             return HttpResponseRedirect(
-                reverse("linkboard:linkboardpage", args=(1,)))
+                reverse("linkboard:linkboard"))
 
     return render(request, "linkboard/linkpost.html")
 
 
+class LinkBoard(ListView):
+    template_name = "linkboard/linkboard.html"
+
+    model = LinkPost
+    context_object_name = 'posts'
+
+    paginate_by = 2
+
+    def get_context_data(self, **kwargs):
+        context = super(LinkBoard, self).get_context_data(**kwargs)
+
+        context['current_page'] = context['page_obj'].number
+        print context['page_obj']
+        last_page = context['page_obj'].paginator.num_pages
+        context['start_page'] = context['current_page'] % 10 == 0 and \
+            (context['current_page'] / 10 - 1) * 10 + 1 or \
+            context['current_page'] / 10 * 10 + 1
+        context['end_page'] = last_page > context['start_page'] + 9 and \
+            context['start_page'] + 9 or last_page
+        context['page_range'] = range(
+            context['start_page'], context['end_page'] + 1
+        )
+
+        context['next_page'] = last_page > context['end_page'] and \
+            context['end_page'] + 1 or 0
+        context['prev_page'] = context['start_page'] - 10 > 0 and \
+            context['start_page'] - 1 or 0
+
+        last_index = context['page_obj'].paginator.count
+        start_index = context['page_obj'].start_index()
+        end_index = context['page_obj'].end_index()
+        indices = list(reversed(range(
+            last_index - end_index + 1, last_index - start_index + 2))
+        )
+        context['mixed_posts'] = zip(context['posts'], indices)
+
+        return context
+
+
 @login_required
-def linkboardpage(request, page=1):
+def linkboard(request, page=1):
     posts = LinkPost.objects.all().order_by('-date_posted')
     posts_per_page = 10
 
@@ -86,7 +127,7 @@ def linkboardpage(request, page=1):
         search_decription = request.POST['search_description']
         posts = posts.filter(description__icontains=search_decription)
         posts = posts[0:50]
-        return render(request, "linkboard/linkboardpage.html",
+        return render(request, "linkboard/linkboard.html",
                       {
                           'posts': posts,
                           'searchvalue': search_decription,
@@ -104,7 +145,7 @@ def linkboardpage(request, page=1):
     except:
         raise Http404
 
-    return render(request, "linkboard/linkboardpage.html",
+    return render(request, "linkboard/linkboard.html",
                   {
                       'post_base_index': (posts_per_page * (page - 1)),
                       'posts': custom_paginator['posts'],
@@ -127,7 +168,7 @@ def updatelinkpost(request, post_id):
     post = LinkPost.objects.get_linkpost(post_id)
     if request.method == 'POST':
         linkpost(request, post_id=post_id)
-        return HttpResponseRedirect(reverse("linkboard:linkboardpage", args=(1,)))
+        return HttpResponseRedirect(reverse("linkboard:linkboard"))
 
     return render(request, "linkboard/updatelinkpost.html",
                   {'post': post})
@@ -143,4 +184,4 @@ def deletelinkpost(request, post_id):
     else:
         linkpost.delete()
 
-    return HttpResponseRedirect(reverse("linkboard:linkboardpage", args=(1,)))
+    return HttpResponseRedirect(reverse("linkboard:linkboard"))
