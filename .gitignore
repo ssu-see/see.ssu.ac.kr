@@ -54,3 +54,6 @@ Thumbs.db
 
 # Local development settings
 **/settings/partials/development.py
+
+# Migrations : no ignore after stable, but not now
+migrations/
