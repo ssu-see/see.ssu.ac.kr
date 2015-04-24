@@ -153,10 +153,9 @@ def postpage(request, board_id, post_id):
                     post=post, comment=comment
                 )
             except ValidationError:
-                messages.error(request, msg.boards_writer_perm_error)
+                messages.error(request, "Comment permission error")
 
-    commentlist = \
-        Comment.objects.filter(post=post).order_by('date_commented')
+    commentlist = Comment.objects.filter(post=post)
 
     return render(request, "boards/postpage.html",
                   {
