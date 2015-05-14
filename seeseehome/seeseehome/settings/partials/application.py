@@ -33,6 +33,7 @@ INSTALLED_APPS = (
     # Django Packages
     'ckeditor',
     'multiselectfield',
+    'nocaptcha_recaptcha',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
     {% load staticfiles %}	
+
     <!-- Styles -->
     <link href="{% static 'css/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/compiled/bootstrap-overrides.css' %}">
@@ -18,11 +19,16 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/lib/animate.css' %}" media="screen, projection" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/board-table.css' %}" />
+
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
     {% block stylesheet %}
     {% endblock %}
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 </head>
 <body class="{% block body_class %}{% endblock %}">
     <div id="reponsive-safe-box">
