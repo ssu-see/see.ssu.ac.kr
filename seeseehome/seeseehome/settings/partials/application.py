@@ -107,5 +107,9 @@ AUTH_USER_MODEL = 'users.User'
 GRAPPELLI_ADMIN_TITLE = 'Soongsil Electronic Exhibition'
 
 # Captcha
-NORECAPTCHA_SITE_KEY = os.environ['NORECAPTCHA_SITE_KEY']
-NORECAPTCHA_SECRET_KEY = os.environ['NORECAPTCHA_SECRET_KEY']
+try:
+    NORECAPTCHA_SITE_KEY = os.environ['NORECAPTCHA_SITE_KEY']
+    NORECAPTCHA_SECRET_KEY = os.environ['NORECAPTCHA_SECRET_KEY']
+except:
+    NORECAPTCHA_SITE_KEY = "need captcha site key"
+    NORECAPTCHA_SECRET_KEY = "need captcha secret key"
