@@ -9,9 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import login as _login, logout as _logout
 from django.contrib.auth.decorators import login_required
 
-# I couldn't solve built-in authenticate problem yet
-# So I use custom authenticate(But It is almost same as built-in authenticate)
-# It can authenticate username and email
+from users.forms import Captcha
 
 
 def authenticate(username=None, password=None):
@@ -82,6 +80,11 @@ def signup(request):
     is_contact_number = False
     # username
     if request.method == 'POST':
+        form = Captcha(request.POST)
+        if not form.is_valid():
+            messages.error(request, "Captcha Error")
+            return HttpResponseRedirect(reverse("users:signup"))
+
         username = request.POST['username']
 #       username validator
         try:
@@ -159,8 +162,10 @@ def signup(request):
         messages.success(request, msg.users_signup_success)
         messages.info(request, msg.users_signup_success_info)
         return HttpResponseRedirect(reverse("users:signin"))
+    else:
+        form = Captcha()
 
-    return render(request, "users/signup.html")
+    return render(request, "users/signup.html", locals())
 
 
 @login_required
