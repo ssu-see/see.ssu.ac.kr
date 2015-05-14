@@ -105,3 +105,7 @@ AUTH_USER_MODEL = 'users.User'
 
 # Grapelli admin settings
 GRAPPELLI_ADMIN_TITLE = 'Soongsil Electronic Exhibition'
+
+# Captcha
+NORECAPTCHA_SITE_KEY = os.environ['NORECAPTCHA_SITE_KEY']
+NORECAPTCHA_SECRET_KEY = os.environ['NORECAPTCHA_SECRET_KEY']
