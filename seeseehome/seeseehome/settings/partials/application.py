@@ -33,7 +33,6 @@ INSTALLED_APPS = (
     # Django Packages
     'ckeditor',
     'multiselectfield',
-    'nocaptcha_recaptcha',
     'captcha',
 )
 
