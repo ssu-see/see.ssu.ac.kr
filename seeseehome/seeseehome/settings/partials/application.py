@@ -33,6 +33,7 @@ INSTALLED_APPS = (
     # Django Packages
     'ckeditor',
     'multiselectfield',
+    'nocaptcha_recaptcha',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -104,3 +105,11 @@ AUTH_USER_MODEL = 'users.User'
 
 # Grapelli admin settings
 GRAPPELLI_ADMIN_TITLE = 'Soongsil Electronic Exhibition'
+
+# Captcha
+try:
+    NORECAPTCHA_SITE_KEY = os.environ['NORECAPTCHA_SITE_KEY']
+    NORECAPTCHA_SECRET_KEY = os.environ['NORECAPTCHA_SECRET_KEY']
+except:
+    NORECAPTCHA_SITE_KEY = "need captcha site key"
+    NORECAPTCHA_SECRET_KEY = "need captcha secret key"
