@@ -19,3 +19,4 @@ django-nose
 django-extensions
 django-debug-toolbar
 django-nocaptcha-recaptcha==0.0.18
+django-recaptcha==1.0.4
