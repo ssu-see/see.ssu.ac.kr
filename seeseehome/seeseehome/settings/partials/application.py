@@ -107,12 +107,7 @@ AUTH_USER_MODEL = 'users.User'
 GRAPPELLI_ADMIN_TITLE = 'Soongsil Electronic Exhibition'
 
 # Captcha
-try:
-    RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_SITE_KEY']
-    RECAPTCHA_PRIVATE_KEY = os.environ['RECAPTCHA_SECRET_KEY']
-except:
-    RECAPTCHA_PUBLIC_KEY = "need captcha site key"
-    RECAPTCHA_PRIVATE_KEY = "need captcha secret key"
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_SECRET_KEY')
 
 NOCAPTCHA = True
 RECAPTCHA_USE_SSL = True
