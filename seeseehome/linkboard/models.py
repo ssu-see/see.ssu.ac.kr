@@ -103,7 +103,7 @@ class LinkPost(models.Model):
 
         if not is_exists:
             run_capture_path = join(BASE_DIR, 'linkboard', 'worker', 'site_capture.py')        
-            Popen(['python', run_capture_path, self.url, save_path])
+            Popen(['python', run_capture_path, self.url, save_path, ' > /dev/null'])
 
     def check_link_thumbnail(self):
         self._create_link_thumbnail()

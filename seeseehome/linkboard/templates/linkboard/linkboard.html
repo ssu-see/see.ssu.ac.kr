@@ -20,15 +20,16 @@
           <div class="thumbnail linkboard-thumbnail-wrapper">
             <div class="link-board-thumbnail" style="background-image: url({{ post.url | linkboard_image}});"></div>
             <div class="caption">
-              <h3>{{ post.url | domain_extract }}</h3>
+              <h4>{{ post.url | domain_extract }}</h4>
+              <p class="writer">- {{ post.writer.username }} -</p>
               <p>{{ post.description }}</p>
-              <p>
-                {% if post.writer == user %}
-                    <a href="{% url 'linkboard:updatelinkpost' post.id %}" class="btn btn-default">Edit</a>
-                    <a href="{% url 'linkboard:deletelinkpost' post.id %}" class="btn btn-danger">Delete</a>
-                {% endif %}
-              </p>
             </div>
+            <p>
+              {% if post.writer == user %}
+                  <a href="{% url 'linkboard:updatelinkpost' post.id %}" class="btn btn-default">Edit</a>
+                  <a href="{% url 'linkboard:deletelinkpost' post.id %}" class="btn btn-danger">Delete</a>
+              {% endif %}
+            </p>
           </div>
         </div>
       </a>

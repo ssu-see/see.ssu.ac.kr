@@ -4,6 +4,14 @@
 	background-size: cover;
 }
 
+.caption p {
+	color: #333 !important;
+}
+
+.caption .writer {
+	font-size: 10px;
+}
+
 .linkboard-thumbnail-wrapper {
 	margin-bottom: 10px;
 }
