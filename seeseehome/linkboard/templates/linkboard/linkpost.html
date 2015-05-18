@@ -1,21 +1,16 @@
 {% extends "template.html" %}
 {% block content %}
 {% include "template_menu.html" %}
-<div class="col-sm-3 col-md-2 sidebar">
-  <ul class="nav nav-sidebar">
-  </ul>
-  <ul class="nav nav-sidebar">
-    <li class="active"><a href="{% url 'linkboard:linkboard' 1 %}">Go back to board</a></li>
-  </ul>
-</div>
-<div style="padding:41px 215px;">
- 
+<div class="container">
+  <h3 class="page-header">Link Board</h3>
+
   <form class="form-horizontal" role="form" method="POST">{% csrf_token %}
     <div class="form-group form-group-lg">
-      <div class="col-sm-10">
+      <div class="col-sm-12">
         <input class="form-control" name="url" type="url" id="formGroupInputLarge" placeholder="Enter URL ( Add Protocol In Front Of URL, such as 'http://' or 'https://')" maxlength="200" onkeydown="if (event.keyCode == 13) {     return false;}" required autofocus>
+        <br>
         <input class="form-control" name="description" type="text" id="formGroupInputLarge" placeholder="Write description" maxlength="255" onkeydown="if (event.keyCode == 13) { return false;}" required>
-        <hr>     
+        <br>
         <input class="btn btn-primary btn-lg" name="post" type="submit" value="POST">
       </div>
     </div>

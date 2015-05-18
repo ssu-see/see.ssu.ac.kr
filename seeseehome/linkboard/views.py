@@ -7,9 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from linkboard.models import LinkPost
 from django.core.validators import URLValidator
-
 from django.views.generic.list import ListView
-
 
 @login_required
 def linkpost(request, **extra_fields):
@@ -58,6 +56,7 @@ def linkpost(request, **extra_fields):
                 url=url,
                 description=description
             )
+
             messages.success(request, msg.linkboard_linkpost_success)
             return HttpResponseRedirect(
                 reverse("linkboard:linkboard"))
@@ -79,7 +78,7 @@ class LinkBoard(ListView):
     model = LinkPost
     context_object_name = 'posts'
 
-    paginate_by = 10
+    paginate_by = 9
 
     def get_context_data(self, **kwargs):
         context = super(LinkBoard, self).get_context_data(**kwargs)
@@ -106,6 +105,10 @@ class LinkBoard(ListView):
         indices = list(reversed(range(
             last_index - end_index + 1, last_index - start_index + 2))
         )
+
+        for post in context['posts']:
+            post.check_link_thumbnail() # check thumbnails
+        
         context['mixed_posts'] = zip(context['posts'], indices)
 
         return context

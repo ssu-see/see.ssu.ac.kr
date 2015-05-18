@@ -6,6 +6,9 @@ __pycache__/
 *.swp
 *.swo
 
+# post assets
+seeseehome/static/link_img
+
 # C extensions
 *.so
 
