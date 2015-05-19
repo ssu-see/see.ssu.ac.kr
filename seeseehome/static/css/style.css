@@ -33,9 +33,16 @@ html, p, input {
 	float: left;
 }
 
-@media (max-width: 990px) {
+@media (max-width: 991px) {
   #reponsive-safe-box {
     margin-top: 120px;
+  }
+  .navbar ul.navbar-nav .open .dropdown-menu > li > a {
+  	color: white;
+  	opacity: .6;
+  }
+  .navbar ul.navbar-nav .open .dropdown-menu > li > a:hover {
+  	opacity: 1;
   }
 }
 .board-new {
