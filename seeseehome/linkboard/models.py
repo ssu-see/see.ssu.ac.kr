@@ -1,5 +1,6 @@
 import hashlib
 
+from urlparse import urlparse, parse_qs
 from django.db import models
 from seeseehome import msg, testdata
 from django.core.exceptions import ValidationError
@@ -83,6 +84,37 @@ class LinkPost(models.Model):
     date_posted = models.DateTimeField(db_index=True, auto_now_add=True,
                                        help_text="It is used to show date when the link posted")
 
+    def get_youtube_id(self):
+        parsed_uri = urlparse(self.url)
+
+        if parsed_uri.netloc == 'youtu.be':
+            return parsed_uri.path
+        elif parsed_uri.netloc == 'www.youtube.com':
+            query = parse_qs(parsed_uri.query)
+            if not query.get('v') == None:
+                return '/' + query['v'][0]
+
+        return ''
+
+
+    @property
+    def is_youtube_link(self):
+        parsed_uri = urlparse(self.url)
+        domain = '{uri.netloc}'.format(uri=parsed_uri)
+        if domain == 'youtu.be':
+            return True
+        elif domain == 'www.youtube.com':
+            query = parse_qs(parsed_uri.query)
+            return not (query.get('v') == None)
+            
+        return False
+
+    @property
+    def youtube_iframe_url(self):
+        i_url = 'http://www.youtube.com/embed{id}'.format(id=self.get_youtube_id())
+
+        return i_url
+
     def _exists_thumbnail(self):
         
         link_img_dir = join(BASE_DIR, 'static', 'link_img')
@@ -101,7 +133,7 @@ class LinkPost(models.Model):
 
         is_exists, save_path = self._exists_thumbnail()
 
-        if not is_exists:
+        if not (is_exists or self.is_youtube_link):
             run_capture_path = join(BASE_DIR, 'linkboard', 'worker', 'site_capture.py')        
             Popen(['python', run_capture_path, self.url, save_path, ' > /dev/null'])
 

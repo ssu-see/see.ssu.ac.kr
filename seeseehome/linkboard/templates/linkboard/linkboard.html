@@ -18,7 +18,13 @@
       <a href="{{ post.url }}" target="_blank">
         <div class="col-sm-6 col-md-4">
           <div class="thumbnail linkboard-thumbnail-wrapper">
-            <div class="link-board-thumbnail" style="background-image: url({{ post.url | linkboard_image}});"></div>
+            {% if post.is_youtube_link %}
+              <div>
+                <iframe src="{{ post.youtube_iframe_url }}" class="link-board-thumbnail" frameborder="0"  allowfullscreen></iframe>
+              </div>
+            {% else %}
+              <div class="link-board-thumbnail" style="background-image: url({{ post.url | linkboard_image}});"></div>
+            {% endif %}
             <div class="caption">
               <h4>{{ post.url | domain_extract | truncatechars:20 }}</h4>
               <p class="writer">- {{ post.writer.username | truncatechars:40 }} -</p>
