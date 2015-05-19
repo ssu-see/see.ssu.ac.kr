@@ -1,19 +1,19 @@
 {% extends "template.html" %}
 {% block content %}
 {% include "template_menu.html" %}
+<div class="container">
+	<div style="padding:0px 15px;">
+	  <h2>개인정보</h2>
+	</div>
+	  <address>
+	    <label for="username_personalinfo" class="col-sm-2 control-label">User name</label>  {{ user.username }}<br><br>
+	    <label for="email_personalinfo" class="col-sm-2 control-label">Email</label>  {{ user.email }}<br><br>
+	    <label for="contact_number_personalinfo" class="col-sm-2 control-label">Contact number</label>  {{ user.contact_number }}<br><br>
+	  </address>
 
-<div style="padding:0px 15px;">
-  <h2>Personal info</h2>
-</div>
-  <address>
-    <label for="username_personalinfo" class="col-sm-2 control-label">User name</label>  {{ user.username }}<br><br>
-    <label for="email_personalinfo" class="col-sm-2 control-label">Email</label>  {{ user.email }}<br><br>
-    <label for="contact_number_personalinfo" class="col-sm-2 control-label">Contact number</label>  {{ user.contact_number }}<br><br>
-  </address>
-
-<div style="padding:0px 15px;">
-  <a class="btn btn-primary" href="{% url 'users:editpersonalinfo' %}">Edit personal info</a>&nbsp;
-  <a class="btn btn-default" href="{% url 'users:editpwd' %}">Edit password</a>
+	<div style="padding:0px 15px;">
+	  <a class="btn btn-primary" href="{% url 'users:editpersonalinfo' %}">Edit personal info</a>&nbsp;
+	  <a class="btn btn-default" href="{% url 'users:editpwd' %}">Edit password</a>
+	</div>
 </div>
 {% endblock %}
-

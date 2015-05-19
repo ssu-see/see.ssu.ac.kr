@@ -1,15 +1,17 @@
 {% extends "template.html" %}
 {% block content %}
   {% include "template_menu.html" %}
-  <h2>Edit personal info</h2>
-  <form method="POST">{% csrf_token %}
-    <div class="col-xs-4">
-      <input name="username" class="form-control" type="text" placeholder="Enter User Name" maxlength="30" value="{{user.username}}" autofocus>
-      <input name="email" class="form-control" type="email" placeholder="Enter Email" maxlength="64" value="{{user.email}}">
-      <input name="contact_number" class="form-control" type="text" placeholder="Enter Contact Number" maxlength="30" value="{{user.contact_number}}">
-      <br>
-      <input class="btn btn-success" name="change_personalinfo_submit" type="submit" value="Change personal info">
-    </div>
-  </form>
+  <div class="container">
+    <h2>Edit personal info</h2>
+    <form method="POST">{% csrf_token %}
+      <div class="col-xs-4">
+        <input name="username" class="form-control" type="text" placeholder="Enter User Name" maxlength="30" value="{{user.username}}" autofocus>
+        <input name="email" class="form-control" type="email" placeholder="Enter Email" maxlength="64" value="{{user.email}}">
+        <input name="contact_number" class="form-control" type="text" placeholder="Enter Contact Number" maxlength="30" value="{{user.contact_number}}">
+        <br>
+        <input class="btn btn-success" name="change_personalinfo_submit" type="submit" value="Change personal info">
+      </div>
+    </form>
+  </div>
 {% endblock %}
 

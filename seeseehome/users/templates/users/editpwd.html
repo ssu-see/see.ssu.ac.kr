@@ -1,16 +1,19 @@
 {% extends "template.html" %}
 {% block content %}
   {% include 'template_menu.html' %}
-  <h2>Edit password</h2>
+  <div class="container">
+    <h2>Edit password</h2>
+    <form method="POST">{% csrf_token %}
+      <div class="row">
+        <div class="col-xs-4">
+          <input name="pwd" class="form-control" type="password" placeholder="Enter Present Password" maxlength="255" class="basic_input" required autofocus>
+          <input name="new_pwd" class="form-control" type="password" placeholder="Enter New Password" maxlength="255" class="basic_input" required>
+          <input name="confirm_new_pwd" class="form-control" type="password" placeholder="Confirm Your New Password" maxlength="255" class="basic_input" required>
+          <br>
+          <input class="btn btn-success" name="change_pwd_submit" type="submit" value="Change password">
+        </div>
+      </div>
+    </form>
   </div>
-  <form method="POST">{% csrf_token %}
-    <div class="col-xs-4">
-      <input name="pwd" class="form-control" type="password" placeholder="Enter Present Password" maxlength="255" class="basic_input" required autofocus>
-      <input name="new_pwd" class="form-control" type="password" placeholder="Enter New Password" maxlength="255" class="basic_input" required>
-      <input name="confirm_new_pwd" class="form-control" type="password" placeholder="Confirm Your New Password" maxlength="255" class="basic_input" required>
-      <br>
-      <input class="btn btn-success" name="change_pwd_submit" type="submit" value="Change password">
-    </div>
-  </form>
 {% endblock %}
 
