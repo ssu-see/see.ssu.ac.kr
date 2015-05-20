@@ -85,6 +85,7 @@ CKEDITOR_JQUERY_URL = \
     '/static/js/jquery-latest.js'
 
 CKEDITOR_CONFIGS = {
+    'allowedContent': 'iframe[*]',
     'default': {
         'toolbar_Full': [
             ["Styles", "Format", "Bold", "Italic", "Underline", "Strike", "SpellChecker", "Undo", "Redo"],

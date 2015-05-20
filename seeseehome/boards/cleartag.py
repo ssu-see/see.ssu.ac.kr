@@ -16,7 +16,7 @@ class ClearTag:
         re.U | re.I)
     step9 = re.compile(r'</*\w+:\w[^>]*>', re.U | re.I)
     step10 = re.compile(
-        r'<(/*)?(applet|input|form|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*>',
+        r'<(/*)?(applet|input|form|b(?:ase|gsound|link)|embed|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*>',
         re.U | re.I)
 
     def clear_tag(self, data):
