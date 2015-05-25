@@ -23,7 +23,6 @@ class LinkPostManager(models.Manager):
 
         linkpost = self.model(description=description, url=url,
                               writer=writer)
-
         linkpost.save(using=self._db)
 
         return linkpost
@@ -139,6 +138,7 @@ class LinkPost(models.Model):
 
     def check_link_thumbnail(self):
         self._create_link_thumbnail()
+        return self
 
 #   for showing description instead of object itself
     def __unicode__(self):
