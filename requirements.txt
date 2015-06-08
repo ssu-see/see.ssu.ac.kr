@@ -19,3 +19,4 @@ django-nose
 django-extensions
 django-debug-toolbar
 django-recaptcha==1.0.4
+raven==5.2.0
