@@ -60,3 +60,5 @@ Thumbs.db
 
 # Migrations : no ignore after stable, but not now
 migrations/
+
+application.py
