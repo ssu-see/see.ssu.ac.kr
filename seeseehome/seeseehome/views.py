@@ -4,7 +4,6 @@ from boards.views import Board
 
 def home(request):
     boardlist = Board.objects.all()
-    print(boardlist)
     return render(request, "home.html", {'boardlist': boardlist})
 
 

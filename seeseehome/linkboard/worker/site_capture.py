@@ -16,7 +16,7 @@ def site_capture():
 		g.exit()
 		print('success')
 	except Exception, e:
-		print('fail')
+		print('fail' + str(e))
 		pass
 
 if __name__ == '__main__':

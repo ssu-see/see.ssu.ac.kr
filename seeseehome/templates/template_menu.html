@@ -1,5 +1,5 @@
 {% load boards_custom_tags %}
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="navbar navbar-inverse" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle pull-right" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -29,14 +29,14 @@
                                 {% endif %}
                               </a>
                             </li>
-                          {% endfor %}  
+                          {% endfor %}
                         {% else %}
                           &nbsp;No board yet
                         {% endif %}
                     </ul>
                 </li>
                 {% if user.is_admin %}
-                    <li><a href="{% url 'admin:index' %}">Admin</a></li> 
+                    <li><a href="{% url 'admin:index' %}">Admin</a></li>
                 {% endif %}
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'users:mypage' %}">My page</a></li>

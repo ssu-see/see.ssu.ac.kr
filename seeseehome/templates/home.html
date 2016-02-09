@@ -1,59 +1,120 @@
 {% extends "template.html" %}
-{% block body_class %}pull_top{% endblock %}
 {% block content %}
-  {% include 'template_menu.html' %}
-    {% load staticfiles %}
-  <section id="feature_slider" class="lol" style="background: #006e93 url('{% static 'img/header-decorator.png' %}') no-repeat top left;"> 
-  	<h1>S.E.E</h1>
-  	<h3>Soongsil Electronic Exhibition<br>Since 1971</h3>
-	</section>
+{% load staticfiles %}
+{% include 'template_menu.html' %}
+<!-- <div id="feature_slider" class="lol" style="background: url('{% static 'img/header-decorator.png' %}') no-repeat top left;"></div> -->
+<div id="full-page">
+    <div id="feature_slider" class="section" style="background-image: url('{% static 'img/background.jpg' %}')">
+        <h1>S.E.E</h1>
+        <h3>Soongsil Electronic Exhibit</h3>
+    </div>
+    <div class="section" id="aboutus">
+        <div class="container">
+            <div class="section_header">
+                <h3>About Us</h3>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 intro">
+                    <h3>안녕하세요?<br>전자전시회 홈페이지에 오신 것을<br>환영합니다.^^</h3>
+                    <p>
+                      숭실대학교 전자전시회(S.E.E)는 1971년 전자공학과 내 소모임으로 출발하여,
+                      1978년 10월 제 1 회 전자전시회를 개최함으로써 본격적인 학회로서의 시작을
+                      맞이하였습니다. 그리고 그 이래로 현재까지 전자전시회를 치루기까지
+                      수 많은 어려움과 위기들이 우리에게 있었으나, 앎에 대한 순수한 열망과 새로운
+                      지식을 탐구하고자 하는 노력이 지금까지 우리들을 지켜온 큰 원동력이 되었습니다.
+                    </p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="flexslider">
+                        <ul class="slides">
+                            <li>
+                              <img src="{% static 'img/about_slide1.jpg' %}" />
+                            </li>
+                            <li>
+                              <img src="{% static 'img/about_slide2.jpg' %}" />
+                            </li>
+                            <li>
+                              <img src="{% static 'img/about_slide3.png' %}" />
+                            </li>
+                            <li>
+                              <img src="{% static 'img/about_slide4.png' %}" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+      <div class="container">
+          <div class="section_header">
+              <h3>What is it?</h3>
+          </div>
+          <div class="row">
+              <div class="col-sm-6 intro">
+                  <p>
+                    S.E.E는 전자/정보통신 공학의 종합적 시스템인 마이크로 로봇과 기타 시스템을 연구ㆍ제작하고, 기존의 이론과 기술을 모태로 새로운 기술을 연구 및 개발함으로써 이론과 실기를 겸비한 유능한 엔지니어가 되는 것을 그 목적으로 하는 정보통신 전자공학부 학회입니다.
+                  </p>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+          <div class="section_header">
+              <h3>What are we doing?</h3>
+          </div>
+          <div class="row">
+              <div class="col-sm-12 intro">
+                  <p>
+                    Hardware와 Software의 기본 지식을 중심으로 하여 Operating System, Network, Multimedia 등 다양한 분야를 접목ㆍ응용하여, 그에 대한 작품들을 제작하고 전시회를 개최하고 있습니다. <br>
+                    Software는 C/C++ language을 중심으로 Algorithm을 이해하고 적용합니다. 최근에는 모바일 연동을 위한 Android, 웹 구축을 위한 Python-Django, 게임개발을 위한 Unity 등을 사용하여 다양한 시도를 하고 있습니다.
+                  </p>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+          <div class="section_header">
+              <h3>Where is it?</h3>
+          </div>
+          <div class="row">
+              <div class="col-sm-6 intro">
+               <img src="{% static "img/seelocation.jpg" %}" alt="SEE Map" width="100%">
+              </div>
+              <div class="col-sm-6">
+                <div class="clearfix" style="width: 100px; margin: 0 auto; margin-top: 10px;">
+                  <div class="areas" style="float: left;">
+                    <div class="circle" style="height: 100px; width: 100px;">
+                      <span class="glyphicon glyphicon-home" style="font-size: 50px;"></span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h3>서울시 동작구 상도로 369<br>숭실대학교 형남공학관<br>5층 524호</h3>
+                  <span class="dark-gray">신입생 가입 및 기타 연락 정보는 공지게시판에 게시되어있습니다.</span>
+                </div>
+              </div>
+          </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/lib/flexslider.css' %}" media="screen">
+<link rel="stylesheet" href="{% static 'css/compiled/about.css' %}" media="screen">
+<link rel="stylesheet" href="{% static 'css/jquery.fullPage.css' %}" media="screen">
+{% endblock %}
+{% block javascript%}
+<script src="{% static 'js/flexslider.js' %}"></script>
+<script src="{% static 'js/jquery.fullPage.min.js' %}"></script>
+<script>
+    $(function() {
+        $('#full-page').fullpage({
+            scrollingSpeed: 800
+        });
+    });
 
-	<div id="showcase">
-	    <div class="container">
-	        <div class="section_header">
-	            <h3>Intro</h3>
-	        </div>            
-	        <div class="row feature_wrapper">
-	            <!-- Features Row -->
-	            <div class="features_op1_row">
-	                <!-- Feature -->
-	                <div class="col-sm-4 feature first">
-	                    <div class="img_box">
-                            <img src="{% static 'img/service1.png' %}">
-	                    </div>
-	                    <div class="text">
-	                        <h6>We In SSU</h6>
-	                        <p>
-	                            숭실대학교 전자전시회(S.E.E)는 1971년 전자공학과 내 소모임으로 출발하여, 1978년 10월 제 1 회 전자전시회를 개최함으로써 본격적인 학회로서의 시작을 맞이하였습니다.
-	                        </p>
-	                    </div>
-	                </div>
-	                <!-- Feature -->
-	                <div class="col-sm-4 feature">
-	                    <div class="img_box">
-                            <img src="{% static 'img/service2.png' %}">
-	                    </div>
-	                    <div class="text">
-	                        <h6>Hardware</h6>
-	                        <p>
-	                            Hardware와 Software의 기본 지식을 중심으로 하여 Operating System, Network, Multimedia 등 다양한 분야를 접목ㆍ응용하여, 그에 대한 작품들을 제작하고 전시회를 개최하고 있습니다. 
-	                        </p>
-	                    </div>
-	                </div>
-	                <!-- Feature -->
-	                <div class="col-sm-4 feature last">
-	                    <div class="img_box">
-	                        <img src="{% static 'img/service3.png' %}">
-	                    </div>
-	                    <div class="text">
-	                        <h6>Software</h6>
-	                        <p>
-	                            Software는 C/C++ language을 중심으로 Algorithm을 이해하고 적용합니다. 최근에는 모바일 연동을 위한 Android, 웹 구축을 위한 Python-Django, 게임개발을 위한 Unity 등을 사용하여 다양한 시도를 하고 있습니다.
-	                        </p>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
+</script>
 {% endblock %}

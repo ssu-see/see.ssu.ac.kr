@@ -82,6 +82,7 @@ def signup(request):
     if request.method == 'POST':
         form = Captcha(request.POST)
         if not form.is_valid():
+            print(form)
             messages.error(request, "Captcha Error")
             return HttpResponseRedirect(reverse("users:signup"))
 
