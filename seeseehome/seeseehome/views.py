@@ -1,13 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from boards.views import Board
 
 
 def home(request):
     boardlist = Board.objects.all()
-    print(boardlist)
     return render(request, "home.html", {'boardlist': boardlist})
 
 
 def aboutus(request):
-    boardlist = Board.objects.all()
-    return render(request, "aboutus.html", {'boardlist': boardlist})
+    return redirect('home')

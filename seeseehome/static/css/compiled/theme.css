@@ -66,7 +66,7 @@ header {
       filter: alpha(opacity=100);
       background-color: transparent; }
   .navbar.sticky {
-    background: rgba(0, 0, 0, 0.8) !important;
+    background: rgba(0, 0, 0, 0.8);
     border-bottom: 1px solid #252525; }
     .navbar.sticky .container {
       margin-top: 0px !important;
@@ -211,7 +211,7 @@ header {
       #footer .contact input[type="submit"]:hover {
         background-color: #2190DB; }
   #footer .credits {
-    /* border-top: 1px solid #343437; */
+    border-top: 1px solid #343437;
     padding: 10px 0px 60px 0px; }
     #footer .credits .social {
       margin-top: 30px;
@@ -357,3 +357,5 @@ header {
         margin: 0 30px 0 0; }
   #footer .credits {
     margin-top: 20px; } }
+
+/*# sourceMappingURL=theme.css.map */

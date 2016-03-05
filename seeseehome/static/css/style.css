@@ -7,18 +7,6 @@ html, p, input {
 	font-family: '나눔고딕', 'NanumGothic', 'Nanum Gothic', serif;
 }
 
-.dark-gray {
-	color: #333;
-}
-
-.gray {
-	color: #AAA;
-}
-
-.navbar.navbar-inverse {
-	background: rgba(0, 50, 100, 0.4);
-}
-
 .text-center {
 	text-align: center;
 }
@@ -33,18 +21,27 @@ html, p, input {
 	float: left;
 }
 
-@media (max-width: 991px) {
-  #reponsive-safe-box {
-    margin-top: 120px;
-  }
-  .navbar ul.navbar-nav .open .dropdown-menu > li > a {
-  	color: white;
-  	opacity: .6;
-  }
-  .navbar ul.navbar-nav .open .dropdown-menu > li > a:hover {
-  	opacity: 1;
-  }
-}
 .board-new {
   color: #428bca;
+}
+
+.navbar {
+  border-radius: 0 !important;
+  background-color: #252528;
+  margin: 0;
+}
+
+#footer {
+  padding-top: 20px;
+  background: #252528;
+  height: 100px;
+  color: #bfbfbf;
+}
+
+.navbar-inverse .navbar-brand {
+  color: white;
+}
+
+#reponsive-safe-box > .container, #sign_up2, #sign_in2 {
+  padding: 40px 0;
 }

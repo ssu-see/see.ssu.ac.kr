@@ -26,8 +26,8 @@ body {
 a:hover {
 	text-decoration: none;
 }
-input[type="text"], 
-input[type="password"], 
+input[type="text"],
+input[type="password"],
 input[type="submit"],
 textarea {
 	font-family: 'Lato', Helvetica;
@@ -46,7 +46,7 @@ header {
 -------------------------------------------------- */
 .navbar {
 	padding: 10px 0px 10px 0px;
-	
+
 	&.navbar-inverse {
 		background: rgba(0,0,0,0.4);
 		border-bottom: 1px solid rgb(88, 88, 88);
@@ -108,7 +108,7 @@ header {
 		margin-bottom: 10px;
 		-webkit-transition: margin .2s ease-in-out;
 		-moz-transition: margin .2s ease-in-out;
-		transition: margin .2s ease-in-out;	
+		transition: margin .2s ease-in-out;
 
 		.navbar-header {
 			.navbar-brand {
@@ -117,7 +117,7 @@ header {
 				font-size: 20px;
 				margin-left: -20px;
 				padding: 10px 20px 10px;
-			}	
+			}
 		}
 
 		.collapse {
@@ -137,7 +137,7 @@ header {
 						>li {
 							>a {
 								color: #fff;
-								
+
 								&:hover {
 									background: #08c;
 								}
@@ -444,7 +444,7 @@ header {
 				}
 			}
 		}
-	}	
+	}
 }
 
 /* Global
@@ -473,7 +473,7 @@ header {
 
 @media (max-width: 991px) {
 	body { padding-top: 0 !important; }
-	
+
 	.navbar {
 		&.navbar-inverse {
 			background: #252528;
@@ -484,7 +484,7 @@ header {
 @media (min-width: 768px) and (max-width: 991px) {
 	.navbar {
 		margin-bottom: 0;
-		
+
 		&.transparent {
 			&.navbar-fixed-top {
 				margin-bottom: -70px;
@@ -500,7 +500,7 @@ header {
 				top: 999;
 			}
 		}
-	} 
+	}
 }
 
 @media (max-width: 767px) {
@@ -547,7 +547,7 @@ header {
 		.testimonials {
 			overflow: hidden;
 			margin-bottom: 40px;
-			
+
 			.footer_header {
 				margin-left: 0;
 			}
@@ -591,5 +591,3 @@ header {
 	}
 
 }
-
-

@@ -1,5 +1,5 @@
 {% load boards_custom_tags %}
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="navbar navbar-inverse" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle pull-right" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -13,37 +13,29 @@
 
         <div class="collapse navbar-collapse navbar-ex1-collapse" role="navigation">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'aboutus' %}">ABOUT US</a></li>
-                <li><a href="{% url 'linkboard:linkboard' 1 %}">LINKS</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">BOARDS <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        {% if boardlist %}
-                          {% for board in boardlist %}
-                            <li>
-                              <a href="{% url 'boards:board_post_list' board.id 1 %}" class="clearfix">
-                                <span class="fl">{{ board.boardname }}</span>
-                                {# {{ board | posts_last_3_days }}&nbsp;</span> #}
-                                {% if board|posts_last_3_days %}
-                                  <strong class="board-new fr">New</strong>
-                                {% endif %}
-                              </a>
-                            </li>
-                          {% endfor %}  
-                        {% else %}
-                          &nbsp;No board yet
+                {% if boardlist %}
+                  {% for board in boardlist %}
+                    <li>
+                      <a href="{% url 'boards:board_post_list' board.id 1 %}" class="clearfix">
+                        <span class="fl">{{ board.boardname }}</span>
+                        {# {{ board | posts_last_3_days }}&nbsp;</span> #}
+                        {% if board|posts_last_3_days %}
+                          <strong class="board-new fr">New</strong>
                         {% endif %}
-                    </ul>
-                </li>
+                      </a>
+                    </li>
+                  {% endfor %}
+                {% endif %}
+                <li><a href="{% url 'linkboard:linkboard' 1 %}">링크게시판</a></li>
                 {% if user.is_admin %}
-                    <li><a href="{% url 'admin:index' %}">Admin</a></li> 
+                    <li><a href="{% url 'admin:index' %}">관리자</a></li>
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'users:mypage' %}">My page</a></li>
-                    <li><a href="{% url 'users:logout' %}">Log out</a></li>
+                    <li><a href="{% url 'users:mypage' %}">내 정보</a></li>
+                    <li><a href="{% url 'users:logout' %}">로그아웃</a></li>
                 {% else %}
-                    <li><a href="{% url 'users:signin' %}">Sign in</a></li>
-                    <li><a href="{% url 'users:signup' %}">Sign up</a></li>
+                    <li><a href="{% url 'users:signin' %}">로그인</a></li>
+                    <li><a href="{% url 'users:signup' %}">회원가입</a></li>
                 {% endif %}
             </ul>
         </div>
