@@ -25,15 +25,9 @@ html, p, input {
   color: #428bca;
 }
 
-#feature_slider {
-  opacity: 0.3;
-  width: 100%;
-  z-index: 0;
-  background-size: cover;
-}
-
 .navbar {
   border-radius: 0 !important;
+  background-color: #252528;
   margin: 0;
 }
 
@@ -42,4 +36,12 @@ html, p, input {
   background: #252528;
   height: 100px;
   color: #bfbfbf;
+}
+
+.navbar-inverse .navbar-brand {
+  color: white;
+}
+
+#reponsive-safe-box > .container, #sign_up2, #sign_in2 {
+  padding: 40px 0;
 }

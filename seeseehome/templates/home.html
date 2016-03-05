@@ -2,20 +2,18 @@
 {% block content %}
 {% load staticfiles %}
 {% include 'template_menu.html' %}
-<!-- <div id="feature_slider" class="lol" style="background: url('{% static 'img/header-decorator.png' %}') no-repeat top left;"></div> -->
 <div id="full-page">
-    <div id="feature_slider" class="section" style="background-image: url('{% static 'img/background.jpg' %}')">
-        <h1>S.E.E</h1>
-        <h3>Soongsil Electronic Exhibit</h3>
+    <div id="title" class="section page-cover" style="background-image: url({% static 'img/background.jpg' %})">
+        <h1 class="page-title">S.E.E</h1>
+        <h3 class="page-sub-title">Soongsil Electronic Exhibition</h3>
     </div>
-    <div class="section" id="aboutus">
-        <div class="container">
-            <div class="section_header">
-                <h3>About Us</h3>
-            </div>
+    <div id="aboutus" class="section page-cover" style="background-image: url({% static 'img/hneb.jpg' %})">
+        <h1 class="page-title">About Us</h1>
+        <div class="page-wrapper">
+          <div class="container">
             <div class="row">
                 <div class="col-sm-6 intro">
-                    <h3>안녕하세요?<br>전자전시회 홈페이지에 오신 것을<br>환영합니다.^^</h3>
+                    <strong>안녕하세요?전자전시회 홈페이지에 오신 것을 환영합니다.^^</strong>
                     <p>
                       숭실대학교 전자전시회(S.E.E)는 1971년 전자공학과 내 소모임으로 출발하여,
                       1978년 10월 제 1 회 전자전시회를 개최함으로써 본격적인 학회로서의 시작을
@@ -43,59 +41,71 @@
                     </div>
                 </div>
             </div>
+          </div>
         </div>
     </div>
-    <div class="section">
-      <div class="container">
-          <div class="section_header">
-              <h3>What is it?</h3>
-          </div>
-          <div class="row">
-              <div class="col-sm-6 intro">
-                  <p>
-                    S.E.E는 전자/정보통신 공학의 종합적 시스템인 마이크로 로봇과 기타 시스템을 연구ㆍ제작하고, 기존의 이론과 기술을 모태로 새로운 기술을 연구 및 개발함으로써 이론과 실기를 겸비한 유능한 엔지니어가 되는 것을 그 목적으로 하는 정보통신 전자공학부 학회입니다.
-                  </p>
-              </div>
-          </div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="container">
-          <div class="section_header">
-              <h3>What are we doing?</h3>
-          </div>
-          <div class="row">
-              <div class="col-sm-12 intro">
-                  <p>
-                    Hardware와 Software의 기본 지식을 중심으로 하여 Operating System, Network, Multimedia 등 다양한 분야를 접목ㆍ응용하여, 그에 대한 작품들을 제작하고 전시회를 개최하고 있습니다. <br>
-                    Software는 C/C++ language을 중심으로 Algorithm을 이해하고 적용합니다. 최근에는 모바일 연동을 위한 Android, 웹 구축을 위한 Python-Django, 게임개발을 위한 Unity 등을 사용하여 다양한 시도를 하고 있습니다.
-                  </p>
-              </div>
-          </div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="container">
-          <div class="section_header">
-              <h3>Where is it?</h3>
-          </div>
-          <div class="row">
-              <div class="col-sm-6 intro">
-               <img src="{% static "img/seelocation.jpg" %}" alt="SEE Map" width="100%">
-              </div>
-              <div class="col-sm-6">
-                <div class="clearfix" style="width: 100px; margin: 0 auto; margin-top: 10px;">
-                  <div class="areas" style="float: left;">
-                    <div class="circle" style="height: 100px; width: 100px;">
-                      <span class="glyphicon glyphicon-home" style="font-size: 50px;"></span>
-                    </div>
+    <div id="what-is-it" class="section page-cover" style="background-image: url({% static 'img/smartcar2015.jpg' %})">
+      <h1 class="page-title">What is it?</h1>
+      <div class="page-wrapper">
+          <div class="container">
+              <div class="row">
+                  <div class="col-sm-6 intro">
+                      <p>
+                        S.E.E는 전자/정보통신 공학의 종합적 시스템인 마이크로
+                        로봇과 기타 시스템을 연구ㆍ제작하고, 기존의 이론과
+                        기술을 모태로 새로운 기술을 연구 및 개발함으로써 이론과
+                        실기를 겸비한 유능한 엔지니어가 되는 것을 그 목적으로
+                        하는 전자정보공학부 학회입니다.
+                      </p>
                   </div>
-                </div>
-                <div>
-                  <h3>서울시 동작구 상도로 369<br>숭실대학교 형남공학관<br>5층 524호</h3>
-                  <span class="dark-gray">신입생 가입 및 기타 연락 정보는 공지게시판에 게시되어있습니다.</span>
-                </div>
+                  <div class="col-sm-6">
+                      <div class="flexslider">
+                          <ul class="slides">
+                              <li>
+                                <img src="{% static 'img/what_slides/1.jpg' %}" />
+                              </li>
+                              <li>
+                                <img src="{% static 'img/what_slides/2.jpg' %}" />
+                              </li>
+                              <li>
+                                <img src="{% static 'img/what_slides/3.jpg' %}" />
+                              </li>
+                              <li>
+                                <img src="{% static 'img/what_slides/4.jpg' %}" />
+                              </li>
+                              <li>
+                                <img src="{% static 'img/what_slides/5.jpg' %}" />
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
               </div>
+          </div>
+      </div>
+    </div>
+    <div id="what-we-do" class="section page-cover" style="background-image: url({% static 'img/what-we-do.jpg'%})">
+      <h1 class="page-title">What are we doing</h1>
+      <div class="page-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 intro">
+                    <p>
+                      Hardware와 Software의 기본 지식을 중심으로 하여 Operating System, Network, Multimedia 등 다양한 분야를 접목ㆍ응용하여, 그에 대한 작품들을 제작하고 전시회를 개최하고 있습니다. <br>
+                      Software는 C/C++ language을 중심으로 Algorithm을 이해하고 적용합니다. 최근에는 모바일 연동을 위한 Android, 웹 구축을 위한 Python-Django, 게임개발을 위한 Unity 등을 사용하여 다양한 시도를 하고 있습니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div id="where-is-it" class="section" style="background-image: url({% static 'img/hneb-all.jpg'%})">
+      <div class="container">
+          <div class="row">
+            <h1>Where is it?</h1>
+            <div>
+              <h3>서울시 동작구 상도로 369<br>숭실대학교 형남공학관<br>5층 524호</h3>
+              <span class="dark-gray">신입생 가입 및 기타 연락 정보는 공지게시판에 게시되어있습니다.</span>
+            </div>
           </div>
       </div>
     </div>
@@ -103,7 +113,7 @@
 {% endblock %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'css/lib/flexslider.css' %}" media="screen">
-<link rel="stylesheet" href="{% static 'css/compiled/about.css' %}" media="screen">
+<link rel="stylesheet" href="{% static 'css/compiled/home.css' %}" media="screen">
 <link rel="stylesheet" href="{% static 'css/jquery.fullPage.css' %}" media="screen">
 {% endblock %}
 {% block javascript%}
