@@ -37,7 +37,11 @@ html, p, input {
   height: 100px;
   color: #bfbfbf;
 }
-
+@media (max-width: 1024px) {
+  .navbar .container {
+    width: 1024px;
+  }
+}
 .navbar-inverse .navbar-brand {
   color: white;
 }
