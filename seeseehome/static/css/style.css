@@ -38,6 +38,18 @@ html, p, input {
   color: #bfbfbf;
 }
 
+@media (max-width: 1200px) {
+  .navbar .container {
+    width: 1024px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navbar .container {
+    width: 1024px;
+  }
+}
+
 .navbar-inverse .navbar-brand {
   color: white;
 }
