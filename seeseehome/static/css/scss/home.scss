@@ -66,6 +66,13 @@
             p {
                 font-size: 13px;
             }
+
+            .col-sm-6 {
+                width: 60%;
+                float: none;
+                margin: 0 auto;
+                margin-top: 20px;
+            }
         }
 
         @media screen and (max-height: 400px) and (orientation: landscape) {
