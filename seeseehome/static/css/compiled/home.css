@@ -39,26 +39,11 @@
       @media screen and (max-width: 500px) {
         .page-cover .page-wrapper p {
           font-size: 15px; } }
-    @media screen and (max-width: 800px) {
-      .page-cover .page-wrapper .flexslider {
-        display: none; } }
-    @media screen and (max-height: 800px) and (orientation: landscape) {
-      .page-cover .page-wrapper {
-        width: 50% !important;
-        height: 100% !important;
-        right: 0px !important; }
+    .page-cover .page-wrapper .flexslider {
+      width: 400px; }
+      @media screen and (max-width: 800px) {
         .page-cover .page-wrapper .flexslider {
-          display: block; }
-        .page-cover .page-wrapper p {
-          font-size: 13px; }
-        .page-cover .page-wrapper .col-sm-6 {
-          width: 60%;
-          float: none;
-          margin: 0 auto;
-          margin-top: 20px; } }
-    @media screen and (max-height: 400px) and (orientation: landscape) {
-      .page-cover .page-wrapper .flexslider {
-        display: none; } }
+          display: none; } }
 
 #title h1 {
   text-align: center;
@@ -83,6 +68,9 @@
 #what-is-it .page-title {
   position: absolute;
   bottom: 48%; }
+
+#what-is-it .flexslider {
+  width: 300px; }
 
 #what-we-do .page-title {
   text-align: right;
